@@ -1,5 +1,32 @@
-.email_section{
+.email_section {
     margin-top: 160px !important;
-    position: relative  !important;
+    position: relative !important;
     margin-bottom: 50px;
+    font-size: 25px !important;
+}
+
+.input-group {
+    font-size: 30px !important;
+}
+
+input.ng-touched.ng-invalid {
+    border: 1px solid red;
+}
+
+div {
+    color: red;
+    font-size: 18px;
+}
+
+.error_message {
+    margin-bottom: 5px !important;
+}
+
+button:disabled {
+    background-color: #7f98eb;
+    cursor: not-allowed;
+}
+
+.btn {
+    margin-top: 1px;
 }

@@ -1,24 +1,19 @@
-<app-header></app-header>
-<div class="container position-relative w-50 float-left email_section">
-    <div class="input-group mb-3 ">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="nombre">Correo:</span>
-        </div>
-        <input type="text" class="form-control w-25 " id="email" aria-describedby="correo"
-            placeholder="Correo inscrito del paciente">
+<section>
+    <div class="container position-relative w-50 float-left email_section">
+        <form [formGroup]="emailForm" (ngSubmit)="onSubmit()">
+            <div class="input-group mb-3 ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="nombre">Correo:</span>
+                </div>
+                <input class="form-control w-25 " aria-describedby="correo"
+                    placeholder="Correo inscrito del paciente"
+                    id="email" formControlName="email" type="email">
+            </div>
+            <div class="error_message" *ngIf="email?.invalid && email?.touched">
+                <div *ngIf="email?.errors?.['required']">El correo es obligatorio.</div>
+                <div *ngIf="email?.errors?.['email']">El correo no es válido.</div>
+            </div>
+            <button class="btn btn-primary" type="submit" [disabled]="emailForm.invalid">Validar</button>
+        </form>
     </div>
-
-    <div class="row d-flex flex-nowrap">
-        <div class="w-auto">
-            <button onclick="postCategory()">Validar</button>
-        </div>
-    </div>
-    <div *ngIf="isLoading">Cargando...</div>
-
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-
-    <div *ngIf="data && !isLoading">
-
-    </div>
-</div>
-<app-footer></app-footer>
+</section>

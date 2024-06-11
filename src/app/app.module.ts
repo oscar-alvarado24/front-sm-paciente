@@ -1,27 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
-import { InMemoryCache } from '@apollo/client/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
 import { RequestPasswordComponent } from './request-password/request-password.component';
+import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ValidateEmailComponent } from './validate-email/validate-email.component';
-import { ApiService } from './api.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent,
     RequestPasswordComponent,
+    LoginComponent,
     HeaderComponent,
     FooterComponent,
     ValidateEmailComponent
@@ -30,21 +26,9 @@ import { ApiService } from './api.service';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    ApolloModule
+    ReactiveFormsModule
   ],
-  providers: [
-    {
-      provide: APOLLO_OPTIONS,
-      useFactory: (httpLink: HttpLink) => {
-        return {
-          cache: new InMemoryCache(),
-          link: httpLink.create({ uri: 'https://example.com/graphql' }) // Reemplaza con la URL de tu endpoint GraphQL
-        };
-      },
-      deps: [HttpLink]
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

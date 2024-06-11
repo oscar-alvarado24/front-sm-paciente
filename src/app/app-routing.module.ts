@@ -5,12 +5,12 @@ import { LoginComponent } from './login/login.component';
 import { RequestPasswordComponent } from './request-password/request-password.component';
 import { ValidateEmailComponent } from './validate-email/validate-email.component';
 
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'request-password', component: RequestPasswordComponent },
-  { path: 'validate-email', component: ValidateEmailComponent},
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: 'validate-email', component: ValidateEmailComponent}
 ];
 
 @NgModule({
@@ -18,4 +18,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
