@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PatientService } from 'src/app/service/patient/patient.service';
+
 
 @Component({
   selector: 'app-validate-email',
@@ -8,8 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ValidateEmailComponent {
   emailForm: FormGroup;
+  validateEmail$ = this.servicePatient.validateEmail$;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private servicePatient: PatientService) {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -26,4 +29,5 @@ export class ValidateEmailComponent {
   get email() {
     return this.emailForm.get('email');
   }
+  
 }
