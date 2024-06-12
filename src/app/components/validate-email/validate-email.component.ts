@@ -10,7 +10,8 @@ import { PatientService } from 'src/app/service/patient/patient.service';
 })
 export class ValidateEmailComponent {
   emailForm: FormGroup;
-  validateEmail$ = this.servicePatient.validateEmail$;
+  subscription: any;
+
 
   constructor(private fb: FormBuilder, private servicePatient: PatientService) {
     this.emailForm = this.fb.group({
@@ -22,12 +23,29 @@ export class ValidateEmailComponent {
   onSubmit() {
     if (this.emailForm.valid) {
       console.log('Email válido:', this.emailForm.value);
-    } else {
+      const emailToSend = this.emailForm.value.email;
+      this.subscription = this.servicePatient.validateEmail(emailToSend).subscribe({
+        next: (validateEmail) => {
+          console.log(validateEmail);
+        },
+        error: (error) => {
+          console.error('Error al validar el email:', error);
+        }
+      });
+    }
+
+    else {
       console.log('Email no válido');
     }
   }
   get email() {
     return this.emailForm.get('email');
   }
-  
+
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }
