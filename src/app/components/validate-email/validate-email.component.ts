@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PatientService } from 'src/app/service/patient/patient.service';
 
 
@@ -13,7 +14,7 @@ export class ValidateEmailComponent {
   subscription: any;
 
 
-  constructor(private fb: FormBuilder, private servicePatient: PatientService) {
+  constructor(private fb: FormBuilder, private servicePatient: PatientService, private router: Router) {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -27,6 +28,18 @@ export class ValidateEmailComponent {
       this.subscription = this.servicePatient.validateEmail(emailToSend).subscribe({
         next: (validateEmail) => {
           console.log(validateEmail);
+          switch (validateEmail){
+            case 'email_registrado':
+            this.router.navigate(['/request-password']);
+            break;
+          case 'email_no_registrado':
+            alert('Correo no registrado, verifica la información ingresada.');
+            break;
+          default:
+            alert('Error interno.');
+            break;
+
+          }
         },
         error: (error) => {
           console.error('Error al validar el email:', error);
