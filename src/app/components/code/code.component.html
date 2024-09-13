@@ -1,0 +1,20 @@
+<section>
+    <div class="container position-relative w-50 float-left code_section">
+        <form [formGroup]="codeForm" (ngSubmit)="onSubmit()">
+            <div class="input-group mb-3 ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="nombre">Codigo:</span>
+                </div>
+                <input class="form-control w-25 " aria-describedby="codigo"
+                    placeholder="Codigo recibido"
+                    id="code" formControlName="code" type="code">
+            </div>
+            <div class="error_message" *ngIf="code?.invalid && code?.touched && code?.statusChanges">
+                <div *ngIf="code?.errors?.['required']">El codigo es obligatorio.</div>
+                <div *ngIf="code?.errors?.['pattern']">Ingresa un valor valido de solos numeros.</div>
+                <div *ngIf="code?.errors?.['minlength'] || code?.errors?.['maxlength']">Debe tener 6 caracteres.</div>
+            </div>
+            <button class="btn btn-primary" type="submit" [disabled]="codeForm.invalid">Validar</button>
+        </form>
+    </div>
+</section>

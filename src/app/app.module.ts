@@ -13,6 +13,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ValidateEmailComponent } from './components/validate-email/validate-email.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CodeComponent } from './components/code/code.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     LoginComponent,
     HeaderComponent,
     FooterComponent,
-    ValidateEmailComponent
+    ValidateEmailComponent,
+    CodeComponent
   ],
   imports: [
     BrowserModule,
