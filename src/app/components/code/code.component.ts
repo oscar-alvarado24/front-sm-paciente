@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VerifyService } from 'src/app/service/verify/verify.service';
@@ -11,11 +11,11 @@ import { StorageService } from 'src/app/service/localStotarage/local-storage.ser
   styleUrls: ['./code.component.css']
 })
 export class CodeComponent {
-  email: String = this.storageService.getItem("email");
+  email: string = this.storageService.getItem("email");
   codeForm: FormGroup;
   subscription: any;
 
-  constructor(private fb: FormBuilder, private router: Router, private verifyService:VerifyService, private storageService: StorageService) {
+  constructor(private readonly fb: FormBuilder, private readonly router: Router, private readonly verifyService:VerifyService, private readonly storageService: StorageService) {
     this.codeForm = this.fb.group({
       code: ['',
         [
@@ -38,7 +38,7 @@ export class CodeComponent {
         email:this.email,
         code:this.codeForm.value.code
       }
-      this.subscription =this.verifyService.validateCode<String>(data).subscribe({
+      this.subscription =this.verifyService.validateCode<string>(data).subscribe({
         next:(response:ResponseVerify)=>{
           switch(response.status) {
             case 200:
@@ -48,9 +48,10 @@ export class CodeComponent {
               alert(response.message);
               this.router.navigate([this.storageService.getItem("page")]);
               break;
-            default:
-              const messageError = response.message + response.body;
+            default:{
+              const messageError = `${response.message || ''}${response.body != null ? String(response.body) : ''}`;
               alert(messageError)
+            }
           }
         },
         error:(error)=>{
