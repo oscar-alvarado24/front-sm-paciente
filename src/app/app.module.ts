@@ -6,25 +6,33 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './components/home/home.component';
-import { RequestPasswordComponent } from './components/request-password/request-password.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ValidateEmailComponent } from './components/validate-email/validate-email.component';
+import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CodeComponent } from './components/code/code.component';
+import { PasswordComponent } from './components/password/password.component';
+import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
+import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
+import { PrincipalHomeComponent } from './components/principal-home/principal-home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RequestPasswordComponent,
+    ChangePasswordComponent,
     LoginComponent,
     HeaderComponent,
     FooterComponent,
-    ValidateEmailComponent,
-    CodeComponent
+    GenerateCodeComponent,
+    CodeComponent,
+    PasswordComponent,
+    OptionsMenuComponent,
+    PersonalMenuComponent,
+    PrincipalHomeComponent
   ],
   imports: [
     BrowserModule,

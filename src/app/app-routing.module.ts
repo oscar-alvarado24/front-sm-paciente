@@ -2,16 +2,22 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { RequestPasswordComponent } from './components/request-password/request-password.component';
-import { ValidateEmailComponent } from './components/validate-email/validate-email.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
 import { CodeComponent } from './components/code/code.component';
+import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
+import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
+import { PrincipalHomeComponent } from './components/principal-home/principal-home.component';
 
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'request-password', component: RequestPasswordComponent },
-  { path: 'validate-email', component: ValidateEmailComponent},
+  { path: 'change-password', component: ChangePasswordComponent},
+  { path: 'generate-code', component: GenerateCodeComponent},
+  { path: 'option-menu', component: OptionsMenuComponent},
+  { path: 'personal-menu', component: PersonalMenuComponent},
+  { path: 'principal-home', component: PrincipalHomeComponent},
   { path: 'code', component: CodeComponent}
 ];
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from 'src/app/service/patient/patient.service';
@@ -7,11 +7,11 @@ import { StorageService } from 'src/app/service/localStotarage/local-storage.ser
 
 
 @Component({
-  selector: 'app-validate-email',
-  templateUrl: './validate-email.component.html',
-  styleUrls: ['./validate-email.component.css']
+  selector: 'app-generate-code',
+  templateUrl: './generate-code.component.html',
+  styleUrls: ['./generate-code.component.css']
 })
-export class ValidateEmailComponent implements OnInit{
+export class GenerateCodeComponent {
   emailForm: FormGroup;
   subscription: any;
 
@@ -21,14 +21,10 @@ export class ValidateEmailComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]]
     });
   }
-  ngOnInit(): void {
-    this.storageService.setItem('page', '/validate-email');
-  }
 
   // Método para manejar el envío del formulario
   onSubmit() {
     if (this.emailForm.valid) {
-      console.log('Email válido:', this.emailForm.value);
       const emailToSend = this.emailForm.value.email;
       this.subscription = this.servicePatient.validateEmail(emailToSend).subscribe({
         next: (validateEmail) => {

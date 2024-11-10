@@ -42,11 +42,12 @@ export class CodeComponent {
         next:(response:ResponseVerify)=>{
           switch(response.status) {
             case 200:
-              this.router.navigate(['/request-password']);
+              this.router.navigate(['/change-password']);
+              this.storageService.setItem("emailField",false)
               break
             case 400:
               alert(response.message);
-              this.router.navigate([this.storageService.getItem("page")]);
+              this.router.navigate(['/generate-code']);
               break;
             default:{
               const messageError = `${response.message || ''}${response.body != null ? String(response.body) : ''}`;
@@ -59,7 +60,7 @@ export class CodeComponent {
           const messageError = error.error.message + error.error.body.body;
           alert(messageError)
           if(error.error.body.name === "DontGenerateCodeException"){
-            this.router.navigate([this.storageService.getItem("page")]);
+            this.router.navigate(['/generate-code']);
           }
         }
       })

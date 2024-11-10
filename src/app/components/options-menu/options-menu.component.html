@@ -1,0 +1,40 @@
+<section class="principal">
+    <nav class="horizontal-menu">
+        <ul>
+          <li
+            [class.active]="activeMenu === 'medical-appointments'"
+            (mouseenter)="handleMouseEnter('medical-appointments')"
+            (mouseleave)="handleMouseLeave()"
+          >
+            <span>Citas médicas</span>
+            <ul class="submenu" *ngIf="activeMenu === 'medical-appointments'">
+              <li>Agendar Cita</li>
+              <li>Modificar Cita</li>
+              <li>Cancelar Cita</li>
+            </ul>
+          </li>
+          <li
+            [class.active]="activeMenu === 'laboratory'"
+            (mouseenter)="handleMouseEnter('laboratory')"
+            (mouseleave)="handleMouseLeave()"
+          >
+            <span>Laboratorio</span>
+            <ul class="submenu" *ngIf="activeMenu === 'laboratory'">
+              <li>Agendar Cita</li>
+              <li>Descargar Resultado</li>
+            </ul>
+          </li>
+          <li
+            [class.active]="activeMenu === 'medications'"
+            (mouseenter)="handleMouseEnter('medications')"
+            (mouseleave)="handleMouseLeave()"
+          >
+            <span>Medicamentos</span>
+            <ul class="submenu" *ngIf="activeMenu === 'medications'">
+              <li>Descargar Formula</li>
+              <li>Reclamar Medicamento</li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+</section>

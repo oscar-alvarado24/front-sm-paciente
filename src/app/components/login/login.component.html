@@ -1,1 +1,60 @@
-<p>login works!</p>
+<section>
+    <div class="container position-relative w-50 float-left password_section">
+        <form [formGroup]="loginForm">
+            <div *ngIf="currentState === 'INITIAL'">
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label for="email" class="col-form-label">Correo</label>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <input class="form-control w-25 " aria-describedby="correo"
+                                placeholder="Correo inscrito del paciente" id="email" formControlName="email"
+                                type="email">
+                        </div>
+                        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger mt-1">
+                            <small *ngIf="email?.errors?.['required']">El correo es requerido.</small>
+                            <small *ngIf="email?.errors?.['email']">
+                                El valor ingresado no es un correo con formato valido.</small>
+                        </div>
+                    </div>
+                </div>
+                <app-password (passwordChange)="onPasswordChange($event)">
+                </app-password>
+                <button (click)="signIn()" [disabled]="!isEmailValid || !passwordData">
+                    Iniciar Sesión
+                </button>
+            </div>
+            <div *ngIf="currentState === 'NEW_PASSWORD_REQUIRED'">
+                <app-password (passwordChange)="onPasswordChange($event)">
+                </app-password>
+                <button (click)="changePassword()" [disabled]=" !passwordData">
+                    Cambiar contraseña
+                </button>
+            </div>
+            <div *ngIf="currentState === 'AUTENTICATION MFA'">
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label for="code" class="col-form-label">Codigo</label>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <input class="form-control w-25 " aria-describedby="correo"
+                                placeholder="Codigo de la aplicacion MFA" formControlName="code" type="">
+                        </div>
+                        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger mt-1">
+                            <small *ngIf="code?.errors?.['required']">El codigo es obligatorio.</small>
+                            <small *ngIf="code?.errors?.['pattern']">Ingresa un valor valido de solos numeros.</small>
+                            <small *ngIf="code?.errors?.['minlength'] || code?.errors?.['maxlength']">Debe tener 6
+                                caracteres.</small>
+                        </div>
+                    </div>
+                </div>
+                <button (click)="sendTotp()" [disabled]=" !passwordData">
+                    Enviar codigo
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
