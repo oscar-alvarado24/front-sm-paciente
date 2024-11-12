@@ -18,6 +18,7 @@ import { PasswordComponent } from './components/password/password.component';
 import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
 import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
 import { PrincipalHomeComponent } from './components/principal-home/principal-home.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { PrincipalHomeComponent } from './components/principal-home/principal-ho
     BrowserAnimationsModule,
     ReactiveFormsModule,
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    QRCodeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

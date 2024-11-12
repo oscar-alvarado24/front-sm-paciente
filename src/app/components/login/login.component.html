@@ -32,6 +32,9 @@
                     Cambiar contraseña
                 </button>
             </div>
+            <div *ngIf="currentState === 'VIEW QR'">
+                <qrcode [qrdata]="qrCodeUrl" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+            </div>
             <div *ngIf="currentState === 'AUTENTICATION MFA'">
                 <div class="row mb-3">
                     <div class="col-auto">

@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   currentState: string = "INITIAL"
   loginForm: FormGroup
   passwordData: { password: string, confirmPassword: string } | null = null;
+  qrCodeUrl: string = "";
 
   constructor(private readonly fb: FormBuilder, private readonly storageService: StorageService, private readonly authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
@@ -70,7 +71,9 @@ export class LoginComponent implements OnInit {
               break
             case "CONTINUE_SIGN_IN_WITH_TOTP_SETUP": console.log("autenticacion MFA")
               console.log(response)
-              this.currentState = "AUTENTICATION MFA"
+              this.authService.enableTOTP()
+              this.qrCodeUrl=this.authService.qrCodeUrl
+              this.currentState = "VIEW QR"
           }
         }
       });
@@ -83,6 +86,7 @@ export class LoginComponent implements OnInit {
       this.authService.completeNewPasswordChallenge(this.passwordData.password).then(response => {
         if (response.nextStep.signInStep === "CONTINUE_SIGN_IN_WITH_TOTP_SETUP") {
           console.log("autenticacion MFA")
+          console.log(response)
           this.currentState = "AUTENTICATION MFA"
         }
       })
