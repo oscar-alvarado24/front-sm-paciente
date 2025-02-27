@@ -1,0 +1,23 @@
+.login_section {
+    margin-top: 160px !important;
+    position: relative !important;
+    margin-bottom: 50px;
+}
+
+.forgot-password-btn {
+    background: none;
+    border: none;
+    color: #0066cc;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.forgot-password-btn:hover {
+    text-decoration: underline;
+}
+
+.forgot-password-container {
+    margin-top: 13px;
+}

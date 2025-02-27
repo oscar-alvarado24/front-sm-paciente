@@ -16,7 +16,7 @@ export class GenerateCodeComponent {
   subscription: any;
 
 
-  constructor(private fb: FormBuilder, private servicePatient: PatientService, private router: Router, private verifyService: VerifyService, private storageService: StorageService) {
+  constructor(private readonly fb: FormBuilder, private readonly servicePatient: PatientService, private readonly router: Router, private readonly verifyService: VerifyService, private readonly storageService: StorageService) {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -60,9 +60,9 @@ export class GenerateCodeComponent {
 
 
 
-  generate(email: String) {
+  generate(email: string) {
     const datos = { email: email };
-    this.verifyService.generateCode<String>(datos).subscribe({
+    this.verifyService.generateCode<string>(datos).subscribe({
       next: () => {
         this.router.navigate(['/code']);
 

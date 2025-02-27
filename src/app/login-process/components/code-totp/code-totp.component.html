@@ -1,0 +1,20 @@
+<form [formGroup]="codeForm" class="container">
+    <div class="row mb-3">
+        <div class="col-auto">
+            <label for="code" class="col-form-label">Codigo</label>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <input class="form-control w-25 " aria-describedby="codigo verificación"
+                    placeholder="Ingresa el codigo " formControlName="code" type="">
+            </div>
+            <div *ngIf="code?.invalid && (code?.dirty || code?.touched)" class="text-danger mt-1">
+                <small *ngIf="code?.errors?.['required']">El codigo es obligatorio.</small>
+                <small *ngIf="code?.errors?.['pattern']">Ingresa un valor valido de solos
+                    numeros.</small>
+                <small *ngIf="code?.errors?.['minlength'] || code?.errors?.['maxlength']">Debe tener 6
+                    caracteres.</small>
+            </div>
+        </div>
+    </div>
+</form>

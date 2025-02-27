@@ -1,0 +1,206 @@
+import { Component } from '@angular/core';
+import { AuthService } from 'src/app/login-process/service/auth/auth.service';
+import { Router } from '@angular/router';
+
+/**
+ * @description Componente que maneja el proceso de autenticación de usuarios,
+ * incluyendo login inicial, cambio de contraseña y configuración de autenticación MFA
+ */
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+
+  /** Estado actual del flujo de autenticación */
+  currentState: string = "INITIAL";
+
+  /** Datos de contraseña recibidos del componente hijo app-password */
+  passwordData: { password: string, confirmPassword: string } | null = null;
+
+  /**boleano para determinar si se cumplen todos los condicionales para las contraseas*/
+  arePasswordValid: boolean = false;
+
+  /** URL del código QR para configuración MFA */
+  qrCodeUrl: string = "";
+
+  /** Valor del email del usuario para referencia durante el flujo de autenticación */
+  emailValue: string = "";
+
+  /** boleano para determinar si se cumplen todos los condicionales para el email*/
+  isEmailValid: boolean = false;
+
+  /** Valor del codigo totp */
+  codeValue: string = "";
+
+  /** boleano para determinar si se cumplen todos los condicionales para el codigo totp */
+  isCodeValid: boolean = false;
+
+  /** boleano para controlar el reset del campo del codigo */
+  resetCode: boolean = false;
+
+  /**
+   * @description Inicializa el componente y configura el formulario reactivo
+   * @param authService Servicio para manejar la autenticación
+   * @param router Servicio para la navegación
+   */
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {
+    this.authService = authService;
+    this.router = router;
+  }
+
+  /**
+   * @description Maneja los cambios de estado en el cumplimiento de las condicionales del email desde el componente hijo
+   * @param emailIsValid Objeto con el valor del estado del cumplimiento de las condicionales del email
+   */
+  onEmailValid(emailIsValid: boolean) {
+    this.isEmailValid = emailIsValid;
+  }
+
+  /**
+   * @description Maneja los cambios en el email desde el componente hijo
+   * @param email Objeto con el email
+   */
+  onEmailValue(email: string) {
+    this.emailValue = email;
+  }
+
+  /**
+   * @description Maneja los cambios de estado en el cumplimiento de las condicionales del codigo  totp desde el componente hijo
+   * @param emailIsValid Objeto con el valor del estado del cumplimiento de las condicionales del codigo
+   */
+  onCodeValid(codeIsValid: boolean) {
+    this.isCodeValid = codeIsValid;
+  }
+
+  /**
+   * @description Maneja los cambios en el codigo totp desde el componente hijo
+   * @param code Objeto con el codigo totp
+   */
+  onCodeValue(code: string) {
+    this.codeValue = code;
+  }
+
+  /**
+   * @description Controla cuando se debe envir un reset al componente de codigo-totp
+   */
+  clearCode() {
+    this.resetCode = true;
+    // Volver a false para futuros resets
+    setTimeout(() => this.resetCode = false, 0);
+  }
+
+  /**
+   * @description Maneja los cambios en la contraseña desde el componente hijo
+   * @param passwordData Objeto con la contraseña y su confirmación
+   */
+  onPasswordsValue(passwordData: { password: string, confirmPassword: string }) {
+    this.passwordData = passwordData;
+  }
+
+  /**
+   * @description Maneja los cambios de estado en el cumplimiento de las condicionales de las contraseñas desde el componente hijo
+   * @param emailIsValid Objeto con el valor del estado del cumplimiento de las condicionales de las contraseñas
+   */
+  onPasswordValid(passwordAreValid: boolean) {
+    this.arePasswordValid = passwordAreValid;
+  }
+
+  /**
+   * @description Inicia el proceso de autenticación y maneja los diferentes flujos posibles:
+   * - Cambio de contraseña requerido
+   * - Configuración de MFA
+   * - Verificación de código TOTP
+   */
+  signIn() {
+
+    if (this.isEmailValid && this.passwordData) {
+      console.log(this.emailValue);
+      console.log("arrancando el proseso de loging con el metodo singin")
+      this.authService.signIn(
+        this.emailValue,
+        this.passwordData.password
+      ).then(response => {
+        if (response !== undefined) {
+          switch (response.nextStep.signInStep) {
+            case "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED":
+              console.log("Cambio de contraseña")
+              alert("Debes cambiar la contraseña")
+              this.arePasswordValid = false;
+              this.currentState = "NEW_PASSWORD_REQUIRED"
+              break
+            case "CONTINUE_SIGN_IN_WITH_TOTP_SETUP":
+              this.qrInscription(response.nextStep.totpSetupDetails.sharedSecret)
+              break
+            case "CONFIRM_SIGN_IN_WITH_TOTP_CODE":
+              this.currentState = "SEND TOTP CODE"
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * @description Completa el proceso de cambio de contraseña requerido
+   * y maneja la posible configuración de MFA posterior
+   */
+  changePassword() {
+    if (this.passwordData) {
+      this.authService.completeNewPasswordChallenge(this.passwordData.password).then(response => {
+        if (response.nextStep.signInStep === "CONTINUE_SIGN_IN_WITH_TOTP_SETUP") {
+          console.log("autenticacion MFA")
+          this.qrInscription(response.nextStep.totpSetupDetails.sharedSecret)
+        }
+      })
+    }
+  }
+
+  /**
+   * @description Envía el código TOTP para verificación
+   * y maneja la navegación post-autenticación exitosa
+   */
+  sendTotp() {
+    if (this.isCodeValid) {
+      this.authService.confirmTotpCode(this.codeValue).then(
+        response => {
+          if (response === undefined) {
+            console.log("error")
+            this.clearCode();
+          } else if (response.nextStep.signInStep == 'DONE') {
+            this.router.navigate(['/principal-home']);
+          } else {
+            alert("Tempo de secion expirado, debes iniciar el proceso de registro de la aplicacion de nuevo")
+            this.currentState = "INITIAL";
+          }
+        })
+    }
+  }
+
+  /**
+   * @description Configura la inscripción MFA generando el código QR
+   * @param sharedSecret Secreto compartido para generar el código QR
+   */
+  qrInscription(sharedSecret: any) {
+    this.authService.enableTOTP(this.emailValue, sharedSecret)
+    this.qrCodeUrl = this.authService.qrCodeUrl
+    this.currentState = "VIEW QR"
+  }
+
+  /**
+   * @description Inicia el proceso de recuperación de contraseña
+   */
+  forgotPassword() {
+    this.authService.handleResetPassword(this.emailValue).then(response =>{
+      console.log(response)
+      if (response.status == "correct"){
+        this.router.navigate(['change-password']);
+      }else{
+        alert("Error interno intenta mas tarde")
+      }
+    })
+  }
+}

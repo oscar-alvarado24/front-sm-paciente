@@ -1,0 +1,18 @@
+<form [formGroup]="emailForm" class="container">
+    <div class="row mb-3 ">
+        <div class="col-auto">
+            <label for="email" class="col-form-label">Correo</label>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <input class="form-control w-25 " aria-describedby="correo" placeholder="Correo inscrito del paciente"
+                    id="email" formControlName="email" type="email">
+            </div>
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger mt-1">
+                <small *ngIf="email?.errors?.['required']">El correo es requerido.</small>
+                <small *ngIf="email?.errors?.['email']">
+                    El valor ingresado no es un correo con formato valido.</small>
+            </div>
+        </div>
+    </div>
+</form>

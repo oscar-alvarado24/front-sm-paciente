@@ -1,0 +1,40 @@
+<section>
+    <div class="container position-relative w-50 float-left login_section">
+
+        <div *ngIf="currentState === 'INITIAL'">
+            <app-email (emailValid)="onEmailValid($event)" (emailValue)="onEmailValue($event)"></app-email>
+            <app-password (passwordsValue)="onPasswordsValue($event)" (passwordValid)="onPasswordValid($event)">
+            </app-password>
+            <button (click)="signIn()" [disabled]="!isEmailValid || !arePasswordValid">
+                Iniciar Sesión
+            </button>
+            <div class="forgot-password-container">
+                <button type="button" (click)="forgotPassword()" class="forgot-password-btn">
+                    ¿Ha olvidado su contraseña?
+                </button>
+            </div>
+        </div>
+        <div *ngIf="currentState === 'NEW_PASSWORD_REQUIRED'">
+            <app-password (passwordsValue)="onPasswordsValue($event)" (passwordValid)="onPasswordValid($event)">
+            </app-password>
+            <button (click)="changePassword()" [disabled]=" !arePasswordValid">
+                Cambiar contraseña
+            </button>
+        </div>
+        <div *ngIf="currentState === 'VIEW QR'" class="col">
+            <qrcode [qrdata]="qrCodeUrl" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
+        <div *ngIf="currentState === 'VIEW QR' || currentState === 'SEND TOTP CODE'">
+            <app-code-totp (codeValid)="onCodeValid($event)" (codeValue)="onCodeValue($event)" [reset]="resetCode">
+
+            </app-code-totp>
+
+            <button (click)="sendTotp()" [disabled]=" !isCodeValid">
+                Enviar codigo
+            </button>
+        </div>
+        <div *ngIf="currentState === 'AUTENTICATION MFA'">
+        </div>
+
+    </div>
+</section>

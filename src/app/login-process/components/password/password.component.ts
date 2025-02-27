@@ -15,7 +15,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormBuilder, FormGroup, Valida
 })
 export class PasswordComponent implements ControlValueAccessor{
 
-  @Output() passwordChange = new EventEmitter<{password: string, confirmPassword: string}>();
+  @Output() passwordsValue = new EventEmitter<{password: string, confirmPassword: string}>();
+  @Output() passwordValid = new EventEmitter<boolean>()
   
   
   form: FormGroup;
@@ -25,16 +26,21 @@ export class PasswordComponent implements ControlValueAccessor{
   private onChange: (value: any) => void = () => {};
   private onTouched: () => void = () => {};
 
-  constructor(private fb: FormBuilder) {
+  constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(25), this.passwordValidator()]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16), this.passwordValidator()]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
 
     this.form.valueChanges.subscribe(value => {
       if (this.form.valid) {
-        this.passwordChange.emit(value);
+        this.passwordsValue.emit(value);
+        this.passwordValid.emit(true);
+        console.log("verdadero desde password")
+      }else{
+        this.passwordValid.emit(false);
       }
+
     });
   }
 
@@ -87,6 +93,6 @@ export class PasswordComponent implements ControlValueAccessor{
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.form.disable() : this.form.enable();
+    this.form[isDisabled ? 'disable' : 'enable']();
   }
 }
