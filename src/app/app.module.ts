@@ -5,11 +5,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './general/components/home/home.component';
 import { ChangePasswordComponent } from './login-process/components/change-password/change-password.component';
 import { LoginComponent } from './login-process/components/login/login.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './general/components/header/header.component';
+import { FooterComponent } from './general/components/footer/footer.component';
 import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,6 +23,7 @@ import { AuthenticationProcessComponent } from './components/authentication-proc
 import { EmailComponent } from './login-process/components/email/email.component';
 import { CodeTotpComponent } from './login-process/components/code-totp/code-totp.component';
 import { CountdownComponent } from './login-process/components/countdown/countdown.component';
+import { RecoverPasswordComponent } from './login-process/components/recover-password/recover-password.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { CountdownComponent } from './login-process/components/countdown/countdo
     AuthenticationProcessComponent,
     EmailComponent,
     CodeTotpComponent,
-    CountdownComponent
+    CountdownComponent,
+    RecoverPasswordComponent
   ],
   imports: [
     BrowserModule,

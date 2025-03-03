@@ -43,4 +43,4 @@ Thumbs.db
 
 # environment variables
 *.env
-src\environments\environment.ts
+src/environments/*

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/login-process/service/auth/auth.service';
 import { Router } from '@angular/router';
+import { PatientService } from '../../service/patient/patient.service';
 
 /**
  * @description Componente que maneja el proceso de autenticación de usuarios,
@@ -39,17 +40,22 @@ export class LoginComponent {
 
   /** boleano para controlar el reset del campo del codigo */
   resetCode: boolean = false;
+  servicePatient: any;
+  storageService: any;
 
   /**
    * @description Inicializa el componente y configura el formulario reactivo
    * @param authService Servicio para manejar la autenticación
+   * @param patientService Servicio para manejar la autenticación
    * @param router Servicio para la navegación
    */
   constructor(
     private readonly authService: AuthService,
+    private readonly patientService: PatientService,
     private readonly router: Router
   ) {
     this.authService = authService;
+    this.patientService = patientService;
     this.router = router;
   }
 
@@ -117,32 +123,56 @@ export class LoginComponent {
    * - Verificación de código TOTP
    */
   signIn() {
+    console.log(this.emailValue);
+    this.patientService.validatePatient(this.emailValue).subscribe({
+      next: (validatePatient: any) => {
+        console.log(validatePatient);
+        switch (validatePatient) {
+          case 'usuario_activo':
+            this.startFlowSesion();
+            break;
+          case 'usuario_inactivo':
+            alert('Usuario inactivo, valida con tu empresa e pago de tus aportes');
+            break;
+          case 'usurio_retirado':
+            alert('Usuario retirado');
+            break;
+          default:
+            alert('Error interno.');
+            break;
 
-    if (this.isEmailValid && this.passwordData) {
-      console.log(this.emailValue);
-      console.log("arrancando el proseso de loging con el metodo singin")
-      this.authService.signIn(
-        this.emailValue,
-        this.passwordData.password
-      ).then(response => {
-        if (response !== undefined) {
-          switch (response.nextStep.signInStep) {
-            case "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED":
-              console.log("Cambio de contraseña")
-              alert("Debes cambiar la contraseña")
-              this.arePasswordValid = false;
-              this.currentState = "NEW_PASSWORD_REQUIRED"
-              break
-            case "CONTINUE_SIGN_IN_WITH_TOTP_SETUP":
-              this.qrInscription(response.nextStep.totpSetupDetails.sharedSecret)
-              break
-            case "CONFIRM_SIGN_IN_WITH_TOTP_CODE":
-              this.currentState = "SEND TOTP CODE"
-          }
         }
-      });
-    }
+      },
+      error: (error: any) => {
+        console.error('Error al validar el email:', error);
+      }
+    });
   }
+
+  startFlowSesion() {
+    this.authService.signIn(
+      this.emailValue,
+      this.passwordData!.password
+    ).then(response => {
+      if (response !== undefined) {
+        switch (response.nextStep.signInStep) {
+          case "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED":
+            console.log("Cambio de contraseña")
+            alert("Debes cambiar la contraseña")
+            this.arePasswordValid = false;
+            this.currentState = "NEW_PASSWORD_REQUIRED"
+            break
+          case "CONTINUE_SIGN_IN_WITH_TOTP_SETUP":
+            this.qrInscription(response.nextStep.totpSetupDetails.sharedSecret)
+            break
+          case "CONFIRM_SIGN_IN_WITH_TOTP_CODE":
+            this.currentState = "SEND TOTP CODE"
+        }
+      }
+    });
+  }
+
+
 
   /**
    * @description Completa el proceso de cambio de contraseña requerido
@@ -194,13 +224,13 @@ export class LoginComponent {
    * @description Inicia el proceso de recuperación de contraseña
    */
   forgotPassword() {
-    this.authService.handleResetPassword(this.emailValue).then(response =>{
+    this.authService.handleResetPassword(this.emailValue).then(response => {
       console.log(response)
-      if (response.status == "correct"){
+      if (response.status == "correct") {
         this.router.navigate(['change-password']);
-      }else{
+      } else {
         alert("Error interno intenta mas tarde")
       }
-    })
+    });
   }
 }

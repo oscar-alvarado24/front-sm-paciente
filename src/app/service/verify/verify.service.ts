@@ -9,7 +9,7 @@ import { ResponseVerify } from 'src/app/model/response-verify';
 export class VerifyService {
   private apiUrl = 'http://localhost:8090/verify/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   generateCode<T>(data: any): Observable<ResponseVerify> {
     const url = `${this.apiUrl}generate`;

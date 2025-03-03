@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PatientService } from 'src/app/service/patient/patient.service';
+
 import { VerifyService } from 'src/app/service/verify/verify.service';
 import { StorageService } from 'src/app/service/localStotarage/local-storage.service';
+import { PatientService } from 'src/app/login-process/service/patient/patient.service';
 
 
 @Component({
@@ -24,34 +25,6 @@ export class GenerateCodeComponent {
 
   // Método para manejar el envío del formulario
   onSubmit() {
-    if (this.emailForm.valid) {
-      const emailToSend = this.emailForm.value.email;
-      this.subscription = this.servicePatient.validateEmail(emailToSend).subscribe({
-        next: (validateEmail) => {
-          console.log(validateEmail);
-          switch (validateEmail) {
-            case 'email_registrado':
-              this.storageService.setItem('email', emailToSend);
-              this.generate(emailToSend);
-              break;
-            case 'email_no_registrado':
-              alert('Correo no registrado, verifica la información ingresada.');
-              break;
-            default:
-              alert('Error interno.');
-              break;
-
-          }
-        },
-        error: (error) => {
-          console.error('Error al validar el email:', error);
-        }
-      });
-    }
-
-    else {
-      console.log('Email no válido');
-    }
   }
 
   get email() {
