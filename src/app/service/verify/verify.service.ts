@@ -7,7 +7,7 @@ import { ResponseVerify } from 'src/app/model/response-verify';
   providedIn: 'root'
 })
 export class VerifyService {
-  private apiUrl = 'http://localhost:8090/verify/';
+  private readonly apiUrl = 'http://localhost:8090/verify/';
 
   constructor(private readonly http: HttpClient) { }
 

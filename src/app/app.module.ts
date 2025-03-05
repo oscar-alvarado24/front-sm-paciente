@@ -11,7 +11,7 @@ import { LoginComponent } from './login-process/components/login/login.component
 import { HeaderComponent } from './general/components/header/header.component';
 import { FooterComponent } from './general/components/footer/footer.component';
 import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
-import { GraphQLModule } from './graphql.module';
+import { GraphQLModule } from './login-process/modules/graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CodeComponent } from './components/code/code.component';
 import { PasswordComponent } from './login-process/components/password/password.component';

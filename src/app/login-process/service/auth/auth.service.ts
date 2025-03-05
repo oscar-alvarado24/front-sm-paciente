@@ -4,6 +4,7 @@ import { CognitoResponse } from 'src/app/login-process/model/cognito-response';
 import { PasswordChangeResponse } from '../../model/password-change-response';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -92,7 +93,7 @@ export class AuthService {
       console.log(error);
       const response: PasswordChangeResponse = {
         status: "error",
-        name:error.name
+        name: error.name
       }
       return response;
     }
@@ -118,7 +119,7 @@ export class AuthService {
       }
       const response: PasswordChangeResponse = {
         status: "correct",
-        name:""
+        name: ""
       }
       return response;
     } catch (error: any) {
@@ -135,7 +136,7 @@ export class AuthService {
     username,
     confirmationCode,
     newPassword
-  }: ConfirmResetPasswordInput):Promise<any> {
+  }: ConfirmResetPasswordInput): Promise<any> {
     try {
       await confirmResetPassword({ username, confirmationCode, newPassword });
       const response: PasswordChangeResponse = {
@@ -153,9 +154,6 @@ export class AuthService {
     }
   }
 
+  
 }
-
-
-
-
 

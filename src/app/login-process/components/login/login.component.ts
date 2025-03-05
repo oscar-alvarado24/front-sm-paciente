@@ -202,6 +202,7 @@ export class LoginComponent {
             this.clearCode();
           } else if (response.nextStep.signInStep == 'DONE') {
             this.router.navigate(['/principal-home']);
+            
           } else {
             alert("Tempo de secion expirado, debes iniciar el proceso de registro de la aplicacion de nuevo")
             this.currentState = "INITIAL";
