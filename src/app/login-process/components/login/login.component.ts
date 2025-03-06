@@ -196,12 +196,23 @@ export class LoginComponent {
   sendTotp() {
     if (this.isCodeValid) {
       this.authService.confirmTotpCode(this.codeValue).then(
-        response => {
+        async response => {
           if (response === undefined) {
             console.log("error")
             this.clearCode();
           } else if (response.nextStep.signInStep == 'DONE') {
-            this.router.navigate(['/principal-home']);
+            const role= await this.authService.getCurrentUserWithRole();
+            switch(role){
+              case 'pacientes':
+                this.router.navigate(['/home-patient']);
+                break;
+              case 'ADMIN':
+                this.router.navigate(['/home-admin']);
+                break;
+              default:
+                // Manejar caso sin rol o rol desconocido
+                this.router.navigate(['/login']);
+            }
             
           } else {
             alert("Tempo de secion expirado, debes iniciar el proceso de registro de la aplicacion de nuevo")

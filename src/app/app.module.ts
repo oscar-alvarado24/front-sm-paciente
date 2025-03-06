@@ -17,7 +17,7 @@ import { CodeComponent } from './components/code/code.component';
 import { PasswordComponent } from './login-process/components/password/password.component';
 import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
 import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
-import { PrincipalHomeComponent } from './components/principal-home/principal-home.component';
+import { PatientHomeComponent } from './components/patient-home/patient-home.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { AuthenticationProcessComponent } from './components/authentication-process/authentication-process.component';
 import { EmailComponent } from './login-process/components/email/email.component';
@@ -38,7 +38,7 @@ import { RecoverPasswordComponent } from './login-process/components/recover-pas
     PasswordComponent,
     OptionsMenuComponent,
     PersonalMenuComponent,
-    PrincipalHomeComponent,
+    PatientHomeComponent,
     AuthenticationProcessComponent,
     EmailComponent,
     CodeTotpComponent,

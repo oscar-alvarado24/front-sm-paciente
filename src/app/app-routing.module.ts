@@ -7,8 +7,9 @@ import { GenerateCodeComponent } from './components/generate-code/generate-code.
 import { CodeComponent } from './components/code/code.component';
 import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
 import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
-import { PrincipalHomeComponent } from './components/principal-home/principal-home.component';
+import { PatientHomeComponent } from './components/patient-home/patient-home.component';
 import { RecoverPasswordComponent } from './login-process/components/recover-password/recover-password.component';
+import { roleGuard } from './login-process/guards/login.guard';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
@@ -16,7 +17,11 @@ const routes: Routes = [
   { path: 'generate-code', component: GenerateCodeComponent},
   { path: 'option-menu', component: OptionsMenuComponent},
   { path: 'personal-menu', component: PersonalMenuComponent},
-  { path: 'principal-home', component: PrincipalHomeComponent},
+  { 
+    path: 'home-patient', 
+    component: PatientHomeComponent,
+    canActivate: [roleGuard]
+  },
   { path: 'code', component: CodeComponent},
   { path: 'recover-password', component: RecoverPasswordComponent}
 ];

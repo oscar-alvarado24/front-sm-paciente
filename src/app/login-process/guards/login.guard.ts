@@ -1,15 +1,42 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import { Router, CanActivateFn } from '@angular/router';
+import { from, of } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
+import { AuthService } from '../service/auth/auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class LoginGuard implements CanActivate {
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
-  }
-  
-}
+export const roleGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  const authService = inject(AuthService)
+
+  return from(authService.getCurrentUserWithRole()).pipe(
+    switchMap(userRole => {
+
+      // Lógica de redirección basada en roles
+      switch (userRole) {
+        case 'pacientes':
+          if (state.url !== '/home-patient') {
+            router.navigate(['/home-patient']);
+            return of(false);
+          }
+          return of(true);
+
+        case 'ADMIN':
+          if (state.url !== '/home-admin') {
+            router.navigate(['/home-admin']);
+            return of(false);
+          }
+          return of(true);
+
+        default:
+          router.navigate(['/login']);
+          return of(false);
+      }
+    }),
+    catchError(error => {
+      console.error('Error en la validación del guard', error);
+      router.navigate(['/login']);
+      return of(false);
+    })
+  );
+};
+
