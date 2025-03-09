@@ -24,7 +24,7 @@
     "@apollo/client": "^3.0.0",
     "@aws-amplify/auth": "^6.6.0",
     "@aws-amplify/core": "^6.5.1",
-    "angularx-qrcode": "^15.0.0",
+    "angularx-qrcode": "^16.0.2",
     "apollo-angular": "^5.0.2",
     "aws-amplify": "^6.8.0",
     "bootstrap": "^5.3.3",
