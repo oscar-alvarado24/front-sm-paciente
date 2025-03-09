@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VerifyService } from 'src/app/service/verify/verify.service';
 import { ResponseVerify } from 'src/app/model/response-verify';
-import { StorageService } from 'src/app/service/localStotarage/local-storage.service';
+import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
 
 @Component({
   selector: 'app-code',

@@ -1,0 +1,31 @@
+<section class="principal">
+    <div class="perfil-menu-container">
+        <div class="avatar" >
+            <div class="avatar-circle">
+                <!-- Mostrar imagen si existe, de lo contrario mostrar la inicial -->
+                <img *ngIf="imagenPerfil" [src]="imagenPerfil" class="avatar-imagen" alt="Foto del paciente">
+                
+
+                <!-- Botón para cargar imagen -->
+                <span class="avatar-editar" (click)="seleccionarImagen(); $event.stopPropagation();">
+                    <i class="material-icons">edit</i>
+                </span>
+
+                <!-- Input oculto para seleccionar archivo -->
+                <input #fileInput type="file" accept="image/*" style="display: none;" (change)="onFileSelected($event)">
+            </div>
+        </div>
+
+        <div class="menu">
+            <div class="menu-item" (click)="perfilClick()">
+                Perfil
+            </div>
+            <div class="menu-item" (click)="cambiarContrasenaClick()">
+                Cambiar contraseña
+            </div>
+            <div class="menu-item" (click)="cerrarSesionClick()">
+                Cerrar sesión
+            </div>
+        </div>
+    </div>
+</section>

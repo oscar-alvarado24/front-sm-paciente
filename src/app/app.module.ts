@@ -12,18 +12,20 @@ import { HeaderComponent } from './general/components/header/header.component';
 import { FooterComponent } from './general/components/footer/footer.component';
 import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
 import { GraphQLModule } from './login-process/modules/graphql.module';
+import { PatientModule } from './commons/module/patient/patient.module'
 import { HttpClientModule } from '@angular/common/http';
 import { CodeComponent } from './components/code/code.component';
 import { PasswordComponent } from './login-process/components/password/password.component';
 import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
 import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
-import { PatientHomeComponent } from './components/patient-home/patient-home.component';
+import { PatientHomeComponent } from './patient-home/components/patient-home/patient-home.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { AuthenticationProcessComponent } from './components/authentication-process/authentication-process.component';
 import { EmailComponent } from './login-process/components/email/email.component';
 import { CodeTotpComponent } from './login-process/components/code-totp/code-totp.component';
 import { CountdownComponent } from './login-process/components/countdown/countdown.component';
 import { RecoverPasswordComponent } from './login-process/components/recover-password/recover-password.component';
+import { LeftMenuComponent } from './patient-home/components/left-menu/left-menu.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { RecoverPasswordComponent } from './login-process/components/recover-pas
     EmailComponent,
     CodeTotpComponent,
     CountdownComponent,
-    RecoverPasswordComponent
+    RecoverPasswordComponent,
+    LeftMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +54,7 @@ import { RecoverPasswordComponent } from './login-process/components/recover-pas
     BrowserAnimationsModule,
     ReactiveFormsModule,
     GraphQLModule,
+    PatientModule,
     HttpClientModule,
     QRCodeModule
   ],

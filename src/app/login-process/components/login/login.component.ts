@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/login-process/service/auth/auth.service';
 import { Router } from '@angular/router';
 import { PatientService } from '../../service/patient/patient.service';
+import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service'
 
 /**
  * @description Componente que maneja el proceso de autenticación de usuarios,
@@ -40,9 +41,6 @@ export class LoginComponent {
 
   /** boleano para controlar el reset del campo del codigo */
   resetCode: boolean = false;
-  servicePatient: any;
-  storageService: any;
-
   /**
    * @description Inicializa el componente y configura el formulario reactivo
    * @param authService Servicio para manejar la autenticación
@@ -52,11 +50,13 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly patientService: PatientService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly storageService: StorageService
   ) {
     this.authService = authService;
     this.patientService = patientService;
     this.router = router;
+    this.storageService = storageService;
   }
 
   /**
@@ -205,6 +205,7 @@ export class LoginComponent {
             switch(role){
               case 'pacientes':
                 this.router.navigate(['/home-patient']);
+                this.storageService.setItem("email",this.emailValue);
                 break;
               case 'ADMIN':
                 this.router.navigate(['/home-admin']);

@@ -1,0 +1,81 @@
+.principal {
+    margin-top: 190px !important;
+    margin-left: 20px !important;
+    position: fixed !important;
+    margin-bottom: 50px;
+    width: 25%;
+    max-width: 500px;
+}
+.perfil-menu-container {
+    position: relative;
+    width: 200px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .avatar {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .avatar-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #c84a2f; /* Color naranja/rojo como en la imagen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden; /* Para asegurar que la imagen se recorte en círculo */
+  }
+  
+  .avatar-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Para que la imagen cubra todo el círculo sin deformarse */
+  }
+  
+  .avatar-editar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 2; /* Para asegurar que esté por encima de la imagen */
+  }
+  
+  .avatar-editar i {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .menu {
+    background-color: #863a8a; /* Color morado como en la imagen */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 5px;
+  }
+  
+  .menu-item {
+    color: white;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .menu-item:last-child {
+    border-bottom: none;
+  }

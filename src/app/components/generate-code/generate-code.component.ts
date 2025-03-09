@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { VerifyService } from 'src/app/service/verify/verify.service';
-import { StorageService } from 'src/app/service/localStotarage/local-storage.service';
+import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
 import { PatientService } from 'src/app/login-process/service/patient/patient.service';
 
 

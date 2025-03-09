@@ -7,7 +7,7 @@ import { GenerateCodeComponent } from './components/generate-code/generate-code.
 import { CodeComponent } from './components/code/code.component';
 import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
 import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
-import { PatientHomeComponent } from './components/patient-home/patient-home.component';
+import { PatientHomeComponent } from './patient-home/components/patient-home/patient-home.component';
 import { RecoverPasswordComponent } from './login-process/components/recover-password/recover-password.component';
 import { roleGuard } from './login-process/guards/login.guard';
 const routes: Routes = [
