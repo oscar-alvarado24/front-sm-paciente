@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { PatientService } from '../../service/patient-ct/patient.service';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { PatientCtService } from '../../../commons/service/patient-ct/patient.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
 
 @Component({
@@ -8,9 +8,6 @@ import { StorageService } from 'src/app/commons/service/localStotarage/local-sto
   styleUrls: ['./left-menu.component.css']
 })
 export class LeftMenuComponent {
-  @Input() usuario: string = 'O';
-  @Input() mostrarMenu: boolean = false;
-  @Input() imagenPerfil: string | null = null;
   @Output() onPerfilClick = new EventEmitter<void>();
   @Output() onCambiarContraseñaClick = new EventEmitter<void>();
   @Output() onCerrarSesionClick = new EventEmitter<void>();
@@ -18,26 +15,23 @@ export class LeftMenuComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   email: string = this.storageService.getItem("email");
+  imagenPerfil: string = this.storageService.getItem("photo");
 
-  constructor(private readonly patientService: PatientService, private readonly storageService: StorageService) {
+  constructor(private readonly patientService: PatientCtService, private readonly storageService: StorageService) {
     this.patientService = patientService;
-
+    console.log(this.imagenPerfil)
   }
 
-
-  perfilClick(): void {
-    this.onPerfilClick.emit();
-    this.mostrarMenu = false;
+  perfilClick(){
+    console.log("")
   }
 
   cambiarContrasenaClick(): void {
     this.onCambiarContraseñaClick.emit();
-    this.mostrarMenu = false;
   }
 
   cerrarSesionClick(): void {
     this.onCerrarSesionClick.emit();
-    this.mostrarMenu = false;
   }
 
   seleccionarImagen(): void {

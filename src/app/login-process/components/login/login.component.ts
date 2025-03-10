@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/login-process/service/auth/auth.service';
 import { Router } from '@angular/router';
 import { PatientService } from '../../service/patient/patient.service';
+import { PatientCtService } from 'src/app/commons/service/patient-ct/patient.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service'
 
 /**
@@ -50,6 +51,7 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly patientService: PatientService,
+    private readonly patientCtService: PatientCtService,
     private readonly router: Router,
     private readonly storageService: StorageService
   ) {
@@ -57,6 +59,7 @@ export class LoginComponent {
     this.patientService = patientService;
     this.router = router;
     this.storageService = storageService;
+    this.patientCtService = patientCtService;
   }
 
   /**
@@ -204,6 +207,15 @@ export class LoginComponent {
             const role= await this.authService.getCurrentUserWithRole();
             switch(role){
               case 'pacientes':
+                this.patientCtService.getPatient(this.emailValue).subscribe({
+                  next: (result) => {
+                    this.storageService.setItem("photo",result);
+                  },
+                  error: (error) => {
+                    console.error('Error al consultar el paciente:', error);
+                    
+                  }
+                });
                 this.router.navigate(['/home-patient']);
                 this.storageService.setItem("email",this.emailValue);
                 break;
