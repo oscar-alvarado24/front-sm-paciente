@@ -36,7 +36,9 @@ export class AuthService {
     try {
       const { isSignedIn, nextStep } = await confirmSignIn({
         challengeResponse: newPassword,
-      });;
+      });
+      console.log("nextStep: ", nextStep)
+      console.log("isSignedIn: ", isSignedIn)
       return { isSignedIn, nextStep };
     } catch (error) {
       console.error('Error al cambiar la contraseña:', error);

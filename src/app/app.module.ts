@@ -11,7 +11,6 @@ import { LoginComponent } from './login-process/components/login/login.component
 import { HeaderComponent } from './general/components/header/header.component';
 import { FooterComponent } from './general/components/footer/footer.component';
 import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
-import { GraphQLModule } from './login-process/modules/graphql.module';
 import { PatientModule } from './commons/module/patient/patient.module'
 import { HttpClientModule } from '@angular/common/http';
 import { CodeComponent } from './components/code/code.component';
@@ -26,6 +25,8 @@ import { CodeTotpComponent } from './login-process/components/code-totp/code-tot
 import { CountdownComponent } from './login-process/components/countdown/countdown.component';
 import { RecoverPasswordComponent } from './login-process/components/recover-password/recover-password.component';
 import { LeftMenuComponent } from './patient-home/components/left-menu/left-menu.component';
+import { UpcomingProceduresComponent } from './patient-home/components/upcoming-procedures/upcoming-procedures.component';
+import { LastProceduresComponent } from './patient-home/components/last-procedures/last-procedures.component';
 
 @NgModule({
   declarations: [
@@ -46,14 +47,15 @@ import { LeftMenuComponent } from './patient-home/components/left-menu/left-menu
     CodeTotpComponent,
     CountdownComponent,
     RecoverPasswordComponent,
-    LeftMenuComponent
+    LeftMenuComponent,
+    UpcomingProceduresComponent,
+    LastProceduresComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    GraphQLModule,
     PatientModule,
     HttpClientModule,
     QRCodeModule

@@ -185,7 +185,7 @@ export class LoginComponent {
     if (this.passwordData) {
       this.authService.completeNewPasswordChallenge(this.passwordData.password).then(response => {
         if (response.nextStep.signInStep === "CONTINUE_SIGN_IN_WITH_TOTP_SETUP") {
-          console.log("autenticacion MFA")
+          alert("Contraseña cambiada exitosamente, ahora debes configurar la autenticación multifactor (MFA)")
           this.qrInscription(response.nextStep.totpSetupDetails.sharedSecret)
         }
       })
