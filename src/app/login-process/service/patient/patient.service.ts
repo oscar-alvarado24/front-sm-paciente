@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
-import {map, take, tap} from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {map, take, tap, catchError} from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 
-const VALIDATE_STATUS = gql`
-query ValidateStatus($email: String!) {
-    validateStatus(email: $email)
+const GET_PATIENT = gql`
+  query GetPatient($email: String!) {
+    getPatient(email: $email) {
+      photo
+      status
+    }
   }
 `;
 
@@ -13,25 +16,45 @@ query ValidateStatus($email: String!) {
   providedIn: 'root'
 })
 export class PatientService {
-  private readonly validatePatientResponseSubject = new BehaviorSubject<any >(null);
-  validatePatient$ = this.validatePatientResponseSubject.asObservable();
+  private readonly getPatientResponseSubject   = new BehaviorSubject<any >(null);
+  getPatient$ = this.getPatientResponseSubject.asObservable();
   
   constructor(private readonly apollo: Apollo) { }
 
-  validatePatient(email: string): Observable<any> {
+  getPatient(email: string): Observable<any> {
     return this.apollo.watchQuery<any>({
-      query: VALIDATE_STATUS,
+      query: GET_PATIENT,
       variables: {
         email: email
       }
     }).valueChanges.pipe(
       take(1),
       tap(({data}) =>{
-        const {validateStatus } = data.validateStatus;
-        this.validatePatientResponseSubject.next(validateStatus )
-        console.log(validateStatus);
+        const {getPatient } = data.getPatient;
+        this.getPatientResponseSubject
+        .next(getPatient )
+        console.log(getPatient);
       }),
-      map(({ data }) => data.validateStatus)
+      map(({ data }) => data.getPatient),
+      catchError(error => {
+        console.error('Error al validar paciente:', error);
+        
+        // Verificar si es una PatientNotFoundException usando la clasificación
+        if (error.graphQLErrors && error.graphQLErrors.length > 0) {
+          const graphQLError = error.graphQLErrors[0];
+          if (graphQLError.extensions?.classification === 'NOT_FOUND') {
+            this.getPatientResponseSubject.next(null);
+            return of({ 
+              userNotFound: true, 
+              message: graphQLError.message || 'Usuario no encontrado' 
+            });
+          }
+        }
+        
+        // Para otros errores, propagar el error
+        this.getPatientResponseSubject.next(null);
+        return throwError(() => error);
+      })
     )
   }
 }

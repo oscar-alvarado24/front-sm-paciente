@@ -127,11 +127,12 @@ export class LoginComponent {
    */
   signIn() {
     console.log(this.emailValue);
-    this.patientService.validatePatient(this.emailValue).subscribe({
-      next: (validatePatient: any) => {
-        console.log(validatePatient);
-        switch (validatePatient) {
+    this.patientService.getPatient(this.emailValue).subscribe({
+      next: (getPatient: any) => {
+        console.log(getPatient);
+        switch (getPatient.status) {
           case 'usuario_activo':
+            console.log('Usuario activo, iniciando sesión');
             this.startFlowSesion();
             break;
           case 'usuario_inactivo':
