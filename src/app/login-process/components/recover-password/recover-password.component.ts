@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth/auth.service';
+import { EmailComponent } from '../email/email.component';
 
 @Component({
   selector: 'app-recover-password',
+  standalone: true,
+  imports: [EmailComponent],
   templateUrl: './recover-password.component.html',
   styleUrls: ['./recover-password.component.css']
 })

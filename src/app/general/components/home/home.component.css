@@ -6,17 +6,19 @@
 }
 
 .vh-100 {
-    margin-top: 110px;
+    
     display: flex;
-    height: 600px !important;
+    height: 500px !important;
 }
 
 .img-fluid {
     object-fit: contain;
     position: relative;
-    top: 15px;
-    left: 10px;
+    top: 5px;
+    left: 5px;
     resize: vertical;
+    max-height: 100%; 
+    width: auto
 }
 
 .image {

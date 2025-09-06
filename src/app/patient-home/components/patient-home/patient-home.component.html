@@ -1,20 +1,27 @@
-<section>
-    <div class="patient-home-container">
-        <div class="options-menu">
-            <app-options-menu></app-options-menu>
-        </div>
-        <div class="left-menu">
-            <app-left-menu></app-left-menu>
-        </div>
-        
-        <div class="right-content">
-          <div class="upcoming-procedures">
-            <app-upcoming-procedures></app-upcoming-procedures>
-          </div>
-          
-          <div class="last-procedures">
-            <app-upcoming-procedures></app-upcoming-procedures>
-          </div>
-        </div>
-      </div> 
-</section>
+<div class="patient-home-container">
+  <!-- FILA 1: Menú de opciones horizontal -->
+  <div class="options-menu">
+    <app-options-menu></app-options-menu>
+  </div>
+  
+  <!-- FILA 2: Contenido principal con grid layout -->
+  <div class="main-content">
+    <!-- Menú izquierdo -->
+    <div class="left-menu">
+      <app-left-menu></app-left-menu>
+    </div>
+    
+    <!-- Contenido derecho -->
+    <div class="right-content">
+      <div class="upcoming-procedures">
+        <h3>Próximos Procedimientos</h3>
+        <app-upcoming-procedures></app-upcoming-procedures>
+      </div>
+      
+      <div class="last-procedures">
+        <h3>Últimos Procedimientos</h3>
+        <app-upcoming-procedures></app-upcoming-procedures>
+      </div>
+    </div>
+  </div>
+</div>

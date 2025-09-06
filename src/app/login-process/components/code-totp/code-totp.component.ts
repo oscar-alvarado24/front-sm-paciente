@@ -1,8 +1,11 @@
 import { Component, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 
 @Component({
   selector: 'app-code-totp',
+  standalone: true,
+  imports: [SHARED_IMPORTS],
   templateUrl: './code-totp.component.html',
   styleUrls: ['./code-totp.component.css']
 })

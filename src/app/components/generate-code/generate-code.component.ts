@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 
 import { VerifyService } from 'src/app/service/verify/verify.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
-import { PatientService } from 'src/app/login-process/service/patient/patient.service';
+import { PatientService } from 'src/app/commons/service/graphQL/patient-st/patient-st.service';
+import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 
 
 @Component({
   selector: 'app-generate-code',
+  standalone: true,
+  imports: [SHARED_IMPORTS],
   templateUrl: './generate-code.component.html',
   styleUrls: ['./generate-code.component.css']
 })

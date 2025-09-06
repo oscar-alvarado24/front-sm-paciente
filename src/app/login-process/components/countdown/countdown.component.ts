@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output, SimpleChanges } from
 
 @Component({
   selector: 'app-countdown',
+  standalone: true,
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.css']
 })

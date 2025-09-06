@@ -1,29 +1,55 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './general/components/home/home.component';
-import { LoginComponent } from './login-process/components/login/login.component';
-import { ChangePasswordComponent } from './login-process/components/change-password/change-password.component';
-import { GenerateCodeComponent } from './components/generate-code/generate-code.component';
-import { CodeComponent } from './components/code/code.component';
-import { OptionsMenuComponent } from './components/options-menu/options-menu.component';
-import { PersonalMenuComponent } from './components/personal-menu/personal-menu.component';
-import { PatientHomeComponent } from './patient-home/components/patient-home/patient-home.component';
-import { RecoverPasswordComponent } from './login-process/components/recover-password/recover-password.component';
 import { roleGuard } from './login-process/guards/login.guard';
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'change-password', component: ChangePasswordComponent},
-  { path: 'generate-code', component: GenerateCodeComponent},
-  { path: 'option-menu', component: OptionsMenuComponent},
-  { path: 'personal-menu', component: PersonalMenuComponent},
+  
+  // Lazy loading con componentes standalone
+  { 
+    path: 'login', 
+    loadComponent: () => import('./login-process/components/login/login.component').then(c => c.LoginComponent)
+  },
+  
+  { 
+    path: 'change-password', 
+    loadComponent: () => import('./login-process/components/change-password/change-password.component').then(c => c.ChangePasswordComponent)
+  },
+  
+  { 
+    path: 'recover-password', 
+    loadComponent: () => import('./login-process/components/recover-password/recover-password.component').then(c => c.RecoverPasswordComponent)
+  },
+  
+  { 
+    path: 'generate-code', 
+    loadComponent: () => import('./components/generate-code/generate-code.component').then(c => c.GenerateCodeComponent)
+  },
+  
+  { 
+    path: 'code', 
+    loadComponent: () => import('./components/code/code.component').then(c => c.CodeComponent)
+  },
+  
+  { 
+    path: 'option-menu', 
+    loadComponent: () => import('./components/options-menu/options-menu.component').then(c => c.OptionsMenuComponent)
+  },
+  
+  { 
+    path: 'personal-menu', 
+    loadComponent: () => import('./components/personal-menu/personal-menu.component').then(c => c.PersonalMenuComponent)
+  },
+  
   { 
     path: 'home-patient', 
-    component: PatientHomeComponent,
+    loadComponent: () => import('./patient-home/components/patient-home/patient-home.component').then(c => c.PatientHomeComponent),
     canActivate: [roleGuard]
   },
-  { path: 'code', component: CodeComponent},
-  { path: 'recover-password', component: RecoverPasswordComponent}
+  
+  // Redirección por defecto
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

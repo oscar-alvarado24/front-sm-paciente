@@ -1,8 +1,10 @@
 import { Component, EventEmitter, forwardRef, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-
+import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 @Component({
   selector: 'app-password',
+  standalone: true,
+  imports: [SHARED_IMPORTS],
   templateUrl: './password.component.html',
   styleUrls: ['./password.component.css'],
   providers: [
@@ -36,7 +38,6 @@ export class PasswordComponent implements ControlValueAccessor{
       if (this.form.valid) {
         this.passwordsValue.emit(value);
         this.passwordValid.emit(true);
-        console.log("verdadero desde password")
       }else{
         this.passwordValid.emit(false);
       }

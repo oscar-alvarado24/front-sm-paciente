@@ -4,9 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VerifyService } from 'src/app/service/verify/verify.service';
 import { ResponseVerify } from 'src/app/model/response-verify';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
+import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';  
 
 @Component({
   selector: 'app-code',
+  standalone: true,
+  imports: [SHARED_IMPORTS],
   templateUrl: './code.component.html',
   styleUrls: ['./code.component.css']
 })
@@ -50,7 +53,8 @@ export class CodeComponent {
               this.router.navigate(['/generate-code']);
               break;
             default:{
-              const messageError = `${response.message || ''}${response.body != null ? String(response.body) : ''}`;
+              const bodyString = typeof response.body === 'object'? JSON.stringify(response.body): response.body;
+              const messageError = `${response.message || ''}${response.body != null ? bodyString : ''}`;
               alert(messageError)
             }
           }

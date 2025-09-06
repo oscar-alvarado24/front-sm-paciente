@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "usuario": {
+    "paciente": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,8 +13,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["qrcode"],
-            "outputPath": "dist/usuario",
+            "allowedCommonJsDependencies": [
+              "qrcode",
+              "dotenv"
+            ],
+            "outputPath": "dist/paciente",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -66,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "usuario:build:production"
+              "browserTarget": "paciente:build:production"
             },
             "development": {
-              "browserTarget": "usuario:build:development"
+              "browserTarget": "paciente:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "usuario:build"
+            "browserTarget": "paciente:build"
           }
         },
         "test": {

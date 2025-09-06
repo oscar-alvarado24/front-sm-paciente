@@ -1,6 +1,7 @@
 {
-  "name": "vista-paciente",
+  "name": "paciente",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "config": "node config-env.js",
@@ -24,7 +25,6 @@
     "@apollo/client": "^3.0.0",
     "@aws-amplify/auth": "^6.6.0",
     "@aws-amplify/core": "^6.5.1",
-    "angularx-qrcode": "^16.0.2",
     "apollo-angular": "^5.0.2",
     "aws-amplify": "^6.8.0",
     "bootstrap": "^5.3.3",
@@ -33,7 +33,6 @@
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "vista-paciente": "file:",
     "zone.js": "~0.13.3"
   },
   "devDependencies": {

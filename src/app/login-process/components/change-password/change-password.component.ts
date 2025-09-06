@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/login-process/service/auth/auth.service';
+import { EmailComponent } from '../email/email.component';
+import { CodeTotpComponent } from '../code-totp/code-totp.component';
+import { CountdownComponent } from '../countdown/countdown.component';
+import { PasswordComponent } from '../password/password.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-change-password',
+  standalone: true,
+  imports: [CommonModule, EmailComponent, CodeTotpComponent, CountdownComponent, PasswordComponent],
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css']
 })
@@ -115,6 +122,7 @@ export class ChangePasswordComponent {
   }
 
   changePassword() {
+    console.log("el valor del codigo a confirmar es: ", this.codeValue)
     this.authService.handleConfirmResetPassword({
       username: this.emailValue,
       confirmationCode: this.codeValue,
@@ -122,7 +130,7 @@ export class ChangePasswordComponent {
     }).then(response => {
       console.log(response);
       if (response.status == "correct") {
-        this.router.navigate(['change-password']);
+        this.router.navigate(['login']);
         this.clearCode();
       } else {
         this.currentState = 'RESEND CODE';

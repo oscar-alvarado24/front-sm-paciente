@@ -1,0 +1,85 @@
+@startuml loginPaciente
+actor Paciente
+participant "Interfaz de Usuario" as UI
+participant "Cognito (Servicio de Autenticación)" as Cognito
+participant "Patient (Backend/API)" as Backend
+
+Paciente -> UI: Ingresar Correo y Contraseña
+activate UI
+
+UI -> Backend: Verificar existencia de usuario 
+activate Backend
+Backend --> UI: Usuario No existe / existe / estado del paciente
+deactivate Backend
+UI -> Cognito: Enviar Solicitud de Login (correo, contraseña)
+activate Cognito
+
+Cognito -> UI: Validar Credenciales
+activate DB
+DB --> Cognito: Credenciales Validadas / Inválidas / Estado de registro
+deactivate DB
+
+alt Si es Primera vez (Contraseña por defecto)
+    Cognito --> UI: Solicitar Cambio de Contraseña (NEW_PASSWORD_REQUIRED)
+    deactivate Cognito
+    UI --> Paciente: Mostrar campos para nueva contraseña
+    activate UI
+    Paciente -> UI: Enviar Nueva Contraseña
+    UI -> Cognito: Confirmar Nueva Contraseña 
+    activate Cognito
+    Cognito --> UI: Cambio de Contraseña Exitoso / Fallido
+    deactivate Cognito
+    alt Cambio Exitoso
+        UI --> Paciente: Mostrar "Contraseña actualizada"
+        ' --- Flujo de Configuración TOTP ---
+        activate UI
+        UI -> Cognito: Solicitar configuración TOTP
+        activate Cognito
+        Cognito --> UI: Enviar Secret TOTP y Código QR
+        deactivate Cognito
+        UI --> Paciente: Mostrar Código QR para TOTP
+        deactivate UI
+        Paciente -> UI: Ingresar Código TOTP de la App
+        activate UI
+        UI -> Cognito: Verificar Código TOTP
+        activate Cognito
+        Cognito --> UI: Verificación TOTP Exitosa / Fallida
+        deactivate Cognito
+        alt Verificación TOTP Exitosa
+            UI -> Cognito: Confirmar Inicio de Sesión
+            activate Cognito
+            Cognito --> UI: Token de Sesión y Redirección
+            deactivate Cognito
+            UI -> Paciente: Redirigir a Interfaz del Home
+            deactivate UI
+        else Verificación TOTP Fallida
+            UI --> Paciente: Mostrar "Error en código TOTP"
+            deactivate UI
+        end
+    else Cambio Fallido
+        UI --> Paciente: Mostrar "Error al cambiar contraseña"
+        deactivate UI
+    end
+else Si No es Primera Vez (Ya tiene contraseña personalizada)
+    Cognito --> UI: Solicitar Código TOTP (SOFTWARE_TOKEN_MFA)
+    deactivate Cognito
+    UI --> Paciente: Mostrar campo para código TOTP
+    activate UI
+    Paciente -> UI: Ingresar Código TOTP de la App
+    UI -> Cognito: Verificar Código TOTP
+    activate Cognito
+    Cognito --> UI: Verificación TOTP Exitosa / Fallida
+    deactivate Cognito
+    alt Verificación TOTP Exitosa
+        UI -> Cognito: Confirmar Inicio de Sesión
+        activate Cognito
+        Cognito --> UI: Token de Sesión y Redirección
+        deactivate Cognito
+        UI -> Paciente: Redirigir a Interfaz del Home
+        deactivate UI
+    else Verificación TOTP Fallida
+        UI --> Paciente: Mostrar "Error en código TOTP"
+        deactivate UI
+    end
+end
+@enduml

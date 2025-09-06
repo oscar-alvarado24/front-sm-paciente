@@ -1,8 +1,11 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 
 @Component({
   selector: 'app-email',
+  standalone: true,
+  imports: [SHARED_IMPORTS],
   templateUrl: './email.component.html',
   styleUrls: ['./email.component.css']
 })

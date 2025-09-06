@@ -1,54 +1,55 @@
 .principal {
-    margin-top: 115px !important;
-    position: fixed !important;
-    margin-bottom: 50px;
-    width: 100%;
-    max-width: 1920px;
+  margin: 0;
+  position: relative; /* Cambiado de fixed a relative */
+  width: 100%;
 }
+
 .horizontal-menu {
-    display: flex;
-    justify-content: center;
-    background-color: #f1f1f1;
-    padding: 10px 0;
-    width: 100% !important;
-    max-width: 1920px;
-  }
-  
-  .horizontal-menu ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  
-  .horizontal-menu li {
-    position: relative;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  .horizontal-menu li:hover,
-  .horizontal-menu li.active {
-    background-color: #e6e6e6;
-  }
-  
-  .horizontal-menu .submenu {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    width: max-content;
-    z-index: 1;
-    padding: 10px 0;
-  }
-  
-  .horizontal-menu li:hover > .submenu {
-    display: block;
-  }
-  
-  .horizontal-menu .submenu li {
-    padding: 5px 20px;
-  }
-  
-  .horizontal-menu .submenu li:hover {
-    background-color: #e6e6e6;
-  }
+  display: flex;
+  justify-content: center;
+  background-color: #f1f1f1;
+  padding: 10px 0;
+  width: 100%;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.horizontal-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.horizontal-menu li {
+  position: relative;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.horizontal-menu li:hover,
+.horizontal-menu li.active {
+  background-color: #e6e6e6;
+}
+
+.horizontal-menu .submenu {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: max-content;
+  z-index: 1000;
+  padding: 10px 0;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.horizontal-menu li:hover > .submenu {
+  display: block;
+}
+
+.horizontal-menu .submenu li {
+  padding: 5px 20px;
+}
+
+.horizontal-menu .submenu li:hover {
+  background-color: #e6e6e6;
+}

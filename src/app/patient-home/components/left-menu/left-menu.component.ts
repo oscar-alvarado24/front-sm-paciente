@@ -1,9 +1,12 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { PatientCtService } from '../../../commons/service/patient-ct/patient.service';
+import { PatientService } from '../../../commons/service/graphQL/patient-ct/patient-ct.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
+import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 
 @Component({
   selector: 'app-left-menu',
+  standalone: true,
+  imports: [SHARED_IMPORTS],
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.css']
 })
@@ -16,8 +19,9 @@ export class LeftMenuComponent implements OnInit {
 
   email: string = '';
   imagenPerfil: string = '';
+  lastSessionDate: Date = new Date();
 
-  constructor(private readonly patientService: PatientCtService, private readonly storageService: StorageService) {
+  constructor(private readonly patientService: PatientService, private readonly storageService: StorageService) {
     this.patientService = patientService;
     console.log(this.imagenPerfil)
   }

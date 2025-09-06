@@ -35,6 +35,13 @@
               <li>Reclamar Medicamento</li>
             </ul>
           </li>
+          <li
+            [class.active]="activeMenu === 'notifications'"
+            (mouseenter)="handleMouseEnter('notifications')"
+            (mouseleave)="handleMouseLeave()"
+          >
+            <span>Notificaciones</span>
+          </li>
         </ul>
       </nav>
 </section>

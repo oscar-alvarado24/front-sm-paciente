@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/login-process/service/auth/auth.service';
 import { Router } from '@angular/router';
-import { PatientService } from '../../service/patient/patient.service';
-import { PatientCtService } from 'src/app/commons/service/patient-ct/patient.service';
+import { PatientService } from 'src/app/commons/service/graphQL/patient-st/patient-st.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service'
+import { EmailComponent } from '../email/email.component';
+import { PasswordComponent } from '../password/password.component';
+import { CodeTotpComponent } from '../code-totp/code-totp.component';
+import * as QRCode from 'qrcode'; // Importación correcta
 
 /**
  * @description Componente que maneja el proceso de autenticación de usuarios,
@@ -11,6 +15,8 @@ import { StorageService } from 'src/app/commons/service/localStotarage/local-sto
  */
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, EmailComponent, PasswordComponent, CodeTotpComponent], // Removido QRCodeModule
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -28,6 +34,9 @@ export class LoginComponent {
   /** URL del código QR para configuración MFA */
   qrCodeUrl: string = "";
 
+  /** Imagen del código QR generada como base64 */
+  qrCodeImage: string = "";
+
   /** Valor del email del usuario para referencia durante el flujo de autenticación */
   emailValue: string = "";
 
@@ -42,6 +51,7 @@ export class LoginComponent {
 
   /** boleano para controlar el reset del campo del codigo */
   resetCode: boolean = false;
+  
   /**
    * @description Inicializa el componente y configura el formulario reactivo
    * @param authService Servicio para manejar la autenticación
@@ -51,7 +61,6 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly patientService: PatientService,
-    private readonly patientCtService: PatientCtService,
     private readonly router: Router,
     private readonly storageService: StorageService
   ) {
@@ -59,7 +68,26 @@ export class LoginComponent {
     this.patientService = patientService;
     this.router = router;
     this.storageService = storageService;
-    this.patientCtService = patientCtService;
+  }
+
+  /**
+   * @description Genera el código QR a partir de la URL
+   * @param qrUrl URL para generar el código QR
+   */
+  private async generateQRCode(qrUrl: string): Promise<void> {
+    try {
+      this.qrCodeImage = await QRCode.toDataURL(qrUrl, {
+        width: 200,
+        errorCorrectionLevel: 'M',
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      });
+    } catch (error) {
+      console.error('Error generando código QR:', error);
+    }
   }
 
   /**
@@ -126,10 +154,10 @@ export class LoginComponent {
    * - Verificación de código TOTP
    */
   signIn() {
-    console.log(this.emailValue);
+    console.log("Iniciando el proceso de autenticación con email:", this.emailValue);
     this.patientService.getPatient(this.emailValue).subscribe({
       next: (getPatient: any) => {
-        console.log(getPatient);
+        this.storageService.setItem("photo", getPatient.photo);
         switch (getPatient.status) {
           case 'usuario_activo':
             console.log('Usuario activo, iniciando sesión');
@@ -176,8 +204,6 @@ export class LoginComponent {
     });
   }
 
-
-
   /**
    * @description Completa el proceso de cambio de contraseña requerido
    * y maneja la posible configuración de MFA posterior
@@ -205,29 +231,8 @@ export class LoginComponent {
             console.log("error")
             this.clearCode();
           } else if (response.nextStep.signInStep == 'DONE') {
-            const role= await this.authService.getCurrentUserWithRole();
-            switch(role){
-              case 'pacientes':
-                this.patientCtService.getPatient(this.emailValue).subscribe({
-                  next: (result) => {
-                    this.storageService.setItem("photo",result);
-                  },
-                  error: (error) => {
-                    console.error('Error al consultar el paciente:', error);
-                    
-                  }
-                });
-                this.router.navigate(['/home-patient']);
-                this.storageService.setItem("email",this.emailValue);
-                break;
-              case 'ADMIN':
-                this.router.navigate(['/home-admin']);
-                break;
-              default:
-                // Manejar caso sin rol o rol desconocido
-                this.router.navigate(['/login']);
-            }
-            
+            this.router.navigate(['/home-patient']);
+            this.storageService.setItem("email", this.emailValue);
           } else {
             alert("Tempo de secion expirado, debes iniciar el proceso de registro de la aplicacion de nuevo")
             this.currentState = "INITIAL";
@@ -240,9 +245,11 @@ export class LoginComponent {
    * @description Configura la inscripción MFA generando el código QR
    * @param sharedSecret Secreto compartido para generar el código QR
    */
-  qrInscription(sharedSecret: any) {
+  async qrInscription(sharedSecret: any) {
     this.authService.enableTOTP(this.emailValue, sharedSecret)
     this.qrCodeUrl = this.authService.qrCodeUrl
+    // Generar la imagen del QR code
+    await this.generateQRCode(this.qrCodeUrl);
     this.currentState = "VIEW QR"
   }
 
@@ -250,13 +257,32 @@ export class LoginComponent {
    * @description Inicia el proceso de recuperación de contraseña
    */
   forgotPassword() {
-    this.authService.handleResetPassword(this.emailValue).then(response => {
-      console.log(response)
-      if (response.status == "correct") {
-        this.router.navigate(['change-password']);
-      } else {
-        alert("Error interno intenta mas tarde")
+    this.patientService.validateSesStatus(this.emailValue).subscribe({
+      next: (validateSesStatus: any) => {
+        console.log(validateSesStatus);
+        switch (validateSesStatus) {
+          case 'Email_verificado':
+            this.authService.handleResetPassword(this.emailValue).then(response => {
+              console.log(response)
+              if (response.status == "correct") {
+                this.router.navigate(['change-password']);
+              } else {
+                alert("Error interno intenta mas tarde")
+              }
+            });
+            break;
+          case 'Validacion_reenviada':
+            alert('Se ha enviado una validación al correo electrónico, por favor aceptala y reinicia el proceso de recuperación de contraseña');
+            break;
+          default:
+            alert('Error interno.');
+            break;
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al validar el estado de registro en ses:', error);
       }
     });
+
   }
 }

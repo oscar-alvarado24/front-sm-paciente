@@ -140,6 +140,7 @@ export class AuthService {
     newPassword
   }: ConfirmResetPasswordInput): Promise<any> {
     try {
+      console.log("code: ", confirmationCode)
       await confirmResetPassword({ username, confirmationCode, newPassword });
       const response: PasswordChangeResponse = {
         status: "correct",
