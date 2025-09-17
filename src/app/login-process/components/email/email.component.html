@@ -6,7 +6,7 @@
         <div class="col">
             <div class="input-group">
                 <input class="form-control w-25 " aria-describedby="correo" placeholder="Correo inscrito del paciente"
-                    id="email" formControlName="email" type="email">
+                    id="email" formControlName="email" type="email" autocomplete="email">
             </div>
             <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger mt-1">
                 <small *ngIf="email?.errors?.['required']">El correo es requerido.</small>

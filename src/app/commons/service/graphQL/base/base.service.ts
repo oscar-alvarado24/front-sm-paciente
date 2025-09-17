@@ -46,11 +46,12 @@ export abstract class BaseService {
         mutation,
         variables
       }).then(result => {
-        if (result.errors && result.errors.length > 0) {
-          const mappedError = this.mapGraphQLError(result.errors[0]);
-          observer.error(mappedError);
-          return;
-        }
+      if (result.errors && result.errors.length > 0) {
+        console.error('GraphQL errors:', result.errors);
+        const mappedError = this.mapGraphQLError(result.errors[0]);
+        observer.error(mappedError);
+        return;
+      }
         observer.next(result.data ?? undefined);
         observer.complete();
       }).catch(error => {

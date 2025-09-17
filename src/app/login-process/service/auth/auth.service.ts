@@ -37,8 +37,6 @@ export class AuthService {
       const { isSignedIn, nextStep } = await confirmSignIn({
         challengeResponse: newPassword,
       });
-      console.log("nextStep: ", nextStep)
-      console.log("isSignedIn: ", isSignedIn)
       return { isSignedIn, nextStep };
     } catch (error) {
       console.error('Error al cambiar la contraseña:', error);
@@ -49,7 +47,6 @@ export class AuthService {
 
   async enableTOTP(email: string, secretCode: string) {
     try {
-      console.log("enable TOTP process")
 
       // Genera la URL TOTP
       const totpURL = `otpauth://totp/${email}?secret=${secretCode}&issuer=Eps de Colombia`;
@@ -88,11 +85,10 @@ export class AuthService {
 
   async handleResetPassword(username: string): Promise<PasswordChangeResponse> {
     try {
-      console.log("username: ", username)
       const output = await resetPassword({ username });
       return this.handleResetPasswordNextSteps(output);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       const response: PasswordChangeResponse = {
         status: "error",
         name: error.name
@@ -110,8 +106,6 @@ export class AuthService {
           console.log(
             `Confirmation code was sent to ${codeDeliveryDetails.deliveryMedium}`
           );
-          console.log(nextStep);
-          // Collect the confirmation code from the user and pass to confirmResetPassword.
           break;
         }
         case 'DONE': {
@@ -140,7 +134,6 @@ export class AuthService {
     newPassword
   }: ConfirmResetPasswordInput): Promise<any> {
     try {
-      console.log("code: ", confirmationCode)
       await confirmResetPassword({ username, confirmationCode, newPassword });
       const response: PasswordChangeResponse = {
         status: "correct",
@@ -186,8 +179,6 @@ async getCurrentUserWithRole(): Promise<string> {
     const userRole =
       decodedToken['cognito:groups']?.[0] || // Grupos de Cognito
       '';
-
-    console.log('Rol del usuario:', userRole);
     return userRole;
 
   } catch (error) {

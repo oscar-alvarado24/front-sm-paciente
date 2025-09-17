@@ -10,7 +10,6 @@ import { HeaderComponent } from './general/components/header/header.component';
 import { FooterComponent } from './general/components/footer/footer.component';
 import { GraphQLModule } from './commons/module/patient/graphql.module'
 import { HttpClientModule } from '@angular/common/http';
-import { QRCodeModule } from 'angularx-qrcode';
 import { AuthenticationProcessComponent } from './components/authentication-process/authentication-process.component';
 
 @NgModule({
@@ -27,8 +26,7 @@ import { AuthenticationProcessComponent } from './components/authentication-proc
     BrowserAnimationsModule,
     ReactiveFormsModule,
     GraphQLModule,
-    HttpClientModule,
-    QRCodeModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
