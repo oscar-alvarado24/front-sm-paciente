@@ -24,14 +24,14 @@
                     <!-- Fecha de última sesión -->
                     <div class="session-title">última sesión</div>
 
-                    <div class="session-info">
+                    <div class="session-info" *ngIf="sessionInfo">
                         <div class="info-row">
                             <svg class="icon clock-icon" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
                                 <path d="m12 6 0 6 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" fill="none" />
                             </svg>
-                            <div class="info-text">24/08/2025 11:45</div>
+                            <div class="info-text">{{date}}</div>
                         </div>
 
                         <div class="info-row">
@@ -48,7 +48,7 @@
                                 <circle cx="12" cy="13" r="1" fill="currentColor" />
                                 <circle cx="16" cy="13" r="1" fill="currentColor" />
                             </svg>
-                            <div class="info-text">10.56.48.96</div>
+                            <div class="info-text">{{ip}}</div>
                         </div>
 
                         <div class="info-row">
@@ -67,20 +67,26 @@
                                 <path d="M4.5 8h15" stroke="currentColor" stroke-width="1" opacity="0.6" />
                                 <path d="M4.5 16h15" stroke="currentColor" stroke-width="1" opacity="0.6" />
                             </svg>
-                            <div class="info-text">Medellín - Colombia</div>
+                            <div class="info-text">{{location}}</div>
                         </div>
                     </div>
+                    <div class="info-text message" *ngIf="!sessionInfo && sessionValue">
+                        <p>{{sessionValue}}</p>
+                    </div>
+                    <div class="info-text message" *ngIf="!sessionInfo && !sessionValue">
+                        <p>No hay información de sesión disponible</p>
+                    </div>
                 </div>
-                <div class="menu-item" (click)="perfilClick()" (keydown.enter)="perfilClick()"
-                    (keydown.space)="perfilClick()" tabindex="0" role="menuitem">
+                <div class="menu-item" (click)="viewProfile()" (keydown.enter)="viewProfile()"
+                    (keydown.space)="viewProfile()" tabindex="0" role="menuitem">
                     Perfil
                 </div>
-                <div class="menu-item" (click)="cambiarContrasenaClick()" (keydown.enter)="cambiarContrasenaClick()"
-                    (keydown.space)="cambiarContrasenaClick()" tabindex="0" role="menuitem">
+                <div class="menu-item" (click)="changePassword()" (keydown.enter)="changePassword()"
+                    (keydown.space)="changePassword()" tabindex="0" role="menuitem">
                     Cambiar contraseña
                 </div>
-                <div class="menu-item" (click)="cerrarSesionClick()" (keydown.enter)="cerrarSesionClick()"
-                    (keydown.space)="cerrarSesionClick()" tabindex="0" role="menuitem">
+                <div class="menu-item" (click)="logOut()" (keydown.enter)="logOut()" (keydown.space)="logOut()"
+                    tabindex="0" role="menuitem">
                     Cerrar sesión
                 </div>
             </div>

@@ -7,7 +7,9 @@ import { StorageService } from 'src/app/commons/service/localStotarage/local-sto
 import { EmailComponent } from '../email/email.component';
 import { PasswordComponent } from '../password/password.component';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
+import { SessionService } from '../../../patient-home/service/session/session.service';
 import * as QRCode from 'qrcode'; // Importación correcta
+import { finalize } from 'rxjs/operators';
 
 /**
  * @description Componente que maneja el proceso de autenticación de usuarios,
@@ -51,7 +53,7 @@ export class LoginComponent {
 
   /** boleano para controlar el reset del campo del codigo */
   resetCode: boolean = false;
-  
+
   /**
    * @description Inicializa el componente y configura el formulario reactivo
    * @param authService Servicio para manejar la autenticación
@@ -62,12 +64,14 @@ export class LoginComponent {
     private readonly authService: AuthService,
     private readonly patientService: PatientService,
     private readonly router: Router,
-    private readonly storageService: StorageService
+    private readonly storageService: StorageService,
+    private readonly sessionService: SessionService
   ) {
     this.authService = authService;
     this.patientService = patientService;
     this.router = router;
     this.storageService = storageService;
+    this.sessionService = sessionService;
   }
 
   /**
@@ -231,7 +235,18 @@ export class LoginComponent {
             console.log("error")
             this.clearCode();
           } else if (response.nextStep.signInStep == 'DONE') {
-            this.router.navigate(['/home-patient']);
+            console.log("Autenticación exitosa, redirigiendo a la página principal")
+            this.sessionService.getLastSession(this.emailValue)
+              .pipe(
+                finalize(() => {
+                  this.router.navigate(['/home-patient']);
+                })
+              )
+              .subscribe({
+                error: (error) => {
+                  console.error('Error:', error);
+                }
+              });
             this.storageService.setItem("email", this.emailValue);
           } else {
             alert("Tempo de secion expirado, debes iniciar el proceso de registro de la aplicacion de nuevo")

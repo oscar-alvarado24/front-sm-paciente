@@ -160,12 +160,16 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  justify-content: center;
-  align-items: center;
+  justify-content: center !important;
+  align-items: center !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 .menu-item:last-child {
   border-bottom: none;
+}
+
+.message {
+  text-align: center;
 }
 
 .hidden_input {
