@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApolloClient, InMemoryCache, FetchPolicy } from '@apollo/client/core';
 import { HttpLink } from 'apollo-angular/http';
 import { HttpHeaders } from '@angular/common/http';
-import { SERVICES_CONFIG } from 'src/config/services.config';
+import { SERVICES_CONFIG } from 'src/app/commons/service/graphQL/config/services.config';
 @Injectable({
   providedIn: 'root'
 })

@@ -19,10 +19,7 @@ export class SessionService {
       environment.url_get_session,
       requestBody
     ).pipe(
-      tap((sessionInfo) => {
-        this.storageService.setItem('session', sessionInfo);
-        console.log('Sesión obtenida de Lambda y guardada:', sessionInfo);
-      }),
+      tap((sessionInfo) =>  this.storageService.setItem('session', sessionInfo)),
       catchError((error) => {
         console.error('Error al obtener sesión de Lambda:', error);
         if (error.status === 404) {
@@ -30,7 +27,6 @@ export class SessionService {
           this.storageService.setItem('session', 'Este es el primer ingreso');
           return of(null);
         }
-       
         return throwError(() => error);
       })
     );

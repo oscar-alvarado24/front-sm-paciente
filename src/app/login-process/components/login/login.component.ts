@@ -8,8 +8,10 @@ import { EmailComponent } from '../email/email.component';
 import { PasswordComponent } from '../password/password.component';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
 import { SessionService } from '../../../patient-home/service/session/session.service';
-import * as QRCode from 'qrcode'; // Importación correcta
-import { finalize } from 'rxjs/operators';
+import * as QRCode from 'qrcode'; 
+import { finalize, tap } from 'rxjs/operators';
+import { ProcedureService } from '../../../commons/service/procedure/service/procedure.service';
+import { ProcessProcedures } from '../../../commons/class/process-procedures';
 
 /**
  * @description Componente que maneja el proceso de autenticación de usuarios,
@@ -59,19 +61,24 @@ export class LoginComponent {
    * @param authService Servicio para manejar la autenticación
    * @param patientService Servicio para manejar la autenticación
    * @param router Servicio para la navegación
+   * @param storageService Servicio para manejar el almacenamiento local
+   * @param sessionService Servicio para consumir las lambda de session
+   * @param procedureService Servicio para consumir la api de los procedimientos médicos del paciente
    */
   constructor(
     private readonly authService: AuthService,
     private readonly patientService: PatientService,
     private readonly router: Router,
     private readonly storageService: StorageService,
-    private readonly sessionService: SessionService
+    private readonly sessionService: SessionService,
+    private readonly procedureService: ProcedureService
   ) {
     this.authService = authService;
     this.patientService = patientService;
     this.router = router;
     this.storageService = storageService;
     this.sessionService = sessionService;
+    this.procedureService = procedureService;
   }
 
   /**
@@ -162,6 +169,7 @@ export class LoginComponent {
     this.patientService.getPatient(this.emailValue).subscribe({
       next: (getPatient: any) => {
         this.storageService.setItem("photo", getPatient.photo);
+        this.storageService.setItem("patient", getPatient.id);
         switch (getPatient.status) {
           case 'usuario_activo':
             console.log('Usuario activo, iniciando sesión');
@@ -236,10 +244,25 @@ export class LoginComponent {
             this.clearCode();
           } else if (response.nextStep.signInStep == 'DONE') {
             console.log("Autenticación exitosa, redirigiendo a la página principal")
-            this.sessionService.getLastSession(this.emailValue)
+            this.procedureService.getProceduresByPatientId(parseInt(this.storageService.getItem("patient")), "PRINCIPAL_PAGE", 3)
               .pipe(
+                tap((procedures) => {
+                  const doctorIds = [...new Set(procedures.map(p => p.doctorId))];
+                  
+                  ProcessProcedures.classifyAppointments(procedures, this.storageService)
+                }),
                 finalize(() => {
-                  this.router.navigate(['/home-patient']);
+                  this.sessionService.getLastSession(this.emailValue)
+                    .pipe(
+                      finalize(() => {
+                        this.router.navigate(['/home-patient']);
+                      })
+                    )
+                    .subscribe({
+                      error: (error) => {
+                        console.error('Error:', error);
+                      }
+                    });
                 })
               )
               .subscribe({
@@ -255,6 +278,8 @@ export class LoginComponent {
         })
     }
   }
+
+  
 
   /**
    * @description Configura la inscripción MFA generando el código QR

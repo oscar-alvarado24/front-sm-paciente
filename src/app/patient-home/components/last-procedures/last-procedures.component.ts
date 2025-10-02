@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MedicalProcedure } from '../../../commons/service/procedure/interface/medical-procedure';
 
 @Component({
   selector: 'app-last-procedures',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./last-procedures.component.css']
 })
 export class LastProceduresComponent {
+  lastProcedures: MedicalProcedure[] = [];
 
 }

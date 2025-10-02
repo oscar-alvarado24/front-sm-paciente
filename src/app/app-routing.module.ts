@@ -34,12 +34,7 @@ const routes: Routes = [
   
   { 
     path: 'option-menu', 
-    loadComponent: () => import('./components/options-menu/options-menu.component').then(c => c.OptionsMenuComponent)
-  },
-  
-  { 
-    path: 'personal-menu', 
-    loadComponent: () => import('./components/personal-menu/personal-menu.component').then(c => c.PersonalMenuComponent)
+    loadComponent: () => import('./commons/components/options-menu/options-menu.component').then(c => c.OptionsMenuComponent)
   },
   
   { 

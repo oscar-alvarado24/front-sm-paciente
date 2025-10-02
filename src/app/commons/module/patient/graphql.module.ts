@@ -2,7 +2,7 @@ import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { NgModule } from '@angular/core';
 import { MultiApolloService } from '../../service/graphQL/multiApolo/multi-apollo.service';
 // Importa la configuración de servicios GraphQL
-import { SERVICES_CONFIG } from 'src/config/services.config';
+import { SERVICES_CONFIG } from 'src/app/commons/service/graphQL/config/services.config';
 @NgModule({
   imports: [ApolloModule],
   providers: [
