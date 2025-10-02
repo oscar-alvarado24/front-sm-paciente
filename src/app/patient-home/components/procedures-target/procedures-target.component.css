@@ -1,0 +1,194 @@
+ .appointment-card {
+     background: white;
+     border-radius: 16px;
+     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+     overflow: hidden;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+ }
+
+ .appointment-card:hover {
+     transform: translateY(-4px);
+     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+ }
+
+ .card-header {
+     color: white;
+     padding: 24px;
+     position: relative;
+ }
+
+ .upcoming-header {
+     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ }
+
+ .completed-header {
+     background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+ }
+
+ .header-top {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 16px;
+ }
+
+ .status-badge {
+     padding: 6px 12px;
+     border-radius: 20px;
+     font-size: 12px;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.5px;
+ }
+
+ .status-upcoming {
+     background: rgba(255, 255, 255, 0.2);
+     border: 1px solid rgba(255, 255, 255, 0.3);
+ }
+
+ .status-completed {
+     background: rgba(255, 255, 255, 0.2);
+     border: 1px solid rgba(255, 255, 255, 0.3);
+ }
+
+ .menu-dots {
+     font-size: 20px;
+     cursor: pointer;
+     padding: 4px;
+     border-radius: 50%;
+     transition: background 0.2s ease;
+ }
+
+ .menu-dots:hover {
+     background: rgba(255, 255, 255, 0.1);
+ }
+
+ .date-time {
+     font-size: 18px;
+     font-weight: 600;
+     margin-bottom: 6px;
+ }
+
+ .plan-info {
+     font-size: 14px;
+     opacity: 0.9;
+ }
+
+ .card-body {
+     padding: 24px;
+ }
+
+ .procedure-info {
+     margin-bottom: 16px;
+     padding-bottom: 16px;
+     border-bottom: 1px solid #f1f3f4;
+ }
+
+ .procedure-name {
+     font-size: 18px;
+     font-weight: 700;
+     color: #2c3e50;
+     margin-bottom: 6px;
+ }
+
+ .cost-info {
+     font-size: 16px;
+     font-weight: 600;
+     color: #27ae60;
+ }
+
+ .doctor-info {
+     margin-bottom: 20px;
+ }
+
+ .doctor-name {
+     font-size: 16px;
+     font-weight: 600;
+     color: #34495e;
+     margin-bottom: 4px;
+ }
+
+ .specialty {
+     font-size: 14px;
+     color: #7f8c8d;
+ }
+
+ .appointment-details {
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+ }
+
+ .detail-row {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+ }
+
+ .icon {
+     width: 18px;
+     height: 18px;
+     flex-shrink: 0;
+ }
+
+ .icon-calendar {
+     color: #3498db;
+ }
+
+ .icon-location {
+     color: #1abc9c;
+ }
+
+ .icon-note {
+     color: #f39c12;
+ }
+
+ .detail-text {
+     font-size: 14px;
+     color: #34495e;
+     line-height: 1.4;
+ }
+
+ .address {
+     color: #1abc9c;
+     font-weight: 500;
+ }
+
+ .observations {
+     font-style: italic;
+     color: #7f8c8d;
+ }
+
+ .time-indicator {
+     margin-top: 16px;
+     padding-top: 16px;
+     border-top: 1px solid #f1f3f4;
+ }
+
+ .relative-time {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+     color: white;
+     padding: 8px 12px;
+     border-radius: 20px;
+     font-size: 12px;
+     font-weight: 600;
+     width: fit-content;
+ }
+
+ .time-icon {
+     width: 14px;
+     height: 14px;
+ }
+
+ @media (max-width: 768px) {
+     .cards-grid {
+         grid-template-columns: 1fr;
+     }
+
+     .container {
+         padding: 0 10px;
+     }
+ }
