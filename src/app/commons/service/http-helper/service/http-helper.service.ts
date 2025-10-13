@@ -3,6 +3,7 @@ import { CustomHeaders } from '../interface/custom-headers';
 import { HttpOptions } from '../interface/http-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { CognitoTokenHelper } from '../class/cognito-token-helper';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,12 @@ import { CognitoTokenHelper } from '../class/cognito-token-helper';
 export class HttpHelperService {
 
   constructor() { }
-
+  private readonly secretKey = environment.secretKey;
   
+  private encryptParam(value: string): string {
+    const encrypted = CryptoJS.AES.encrypt(value, this.secretKey).toString();
+    return encodeURIComponent(encrypted);
+  }
   /**
    * Genera las opciones HTTP con headers comunes
    * @param additionalHeaders Headers adicionales a incluir
@@ -55,12 +60,13 @@ export class HttpHelperService {
   getCompleteHttpOptions(
     params?: { [key: string]: any },
     headers?: CustomHeaders,
-    includeAuth: boolean = true
+    includeAuth: boolean = true,
+    encryptParams: boolean = true
   ): HttpOptions {
     const options: HttpOptions = this.getHttpOptions(headers, includeAuth);
 
     if (params) {
-      options.params = this.createHttpParams(params);
+      options.params = this.createHttpParams(params, encryptParams);
     }
 
     return options;
@@ -71,7 +77,7 @@ export class HttpHelperService {
    * @param params Objeto con los parámetros
    * @returns HttpParams configurado
    */
-  private createHttpParams(params: { [key: string]: any }): HttpParams {
+  private createHttpParams(params: { [key: string]: any }, encrypt: boolean): HttpParams {
     let httpParams = new HttpParams();
 
     Object.keys(params).forEach(key => {
@@ -80,10 +86,10 @@ export class HttpHelperService {
         if (Array.isArray(value)) {
           // Para arrays, agregar múltiples parámetros con la misma clave
           value.forEach(item => {
-            httpParams = httpParams.append(key, item.toString());
+            httpParams = httpParams.append(key, encrypt ? this.encryptParam(item.toString()) : item.toString());
           });
         } else {
-          httpParams = httpParams.set(key, value.toString());
+          httpParams = httpParams.set(key, encrypt ? this.encryptParam(value.toString()) : value.toString());
         }
       }
     });
