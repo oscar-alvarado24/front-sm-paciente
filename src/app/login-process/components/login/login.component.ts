@@ -7,11 +7,20 @@ import { StorageService } from 'src/app/commons/service/localStotarage/local-sto
 import { EmailComponent } from '../email/email.component';
 import { PasswordComponent } from '../password/password.component';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
-import { SessionService } from '../../../patient-home/service/session/session.service';
-import * as QRCode from 'qrcode'; 
-import { finalize, tap } from 'rxjs/operators';
+import { SessionService } from '../../service/session/service/session.service';
+import * as QRCode from 'qrcode';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 import { ProcedureService } from '../../../commons/service/procedure/service/procedure.service';
-import { ProcessProcedures } from '../../../commons/class/process-procedures';
+import { ProcessProcedures } from '../../../patient-home/components/procedures-target/class/process-procedures';
+import { EmployeeService } from '../../../commons/service/employee/service/employee.service';
+import { ProviderService } from '../../../commons/service/provider/service/provider.service';
+import { BranchRequest } from 'src/app/commons/service/provider/interface/branch-request';
+import { Doctor } from '../../../commons/service/employee/interface/employee';
+import { MedicalProcedure } from '../../../commons/service/procedure/interface/medical-procedure';
+import { Branch } from '../../../commons/service/provider/interface/provider';
+import { TargetProcedure } from '../../../patient-home/interface/target-procedure';
+import { Observable, of } from 'rxjs';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 /**
  * @description Componente que maneja el proceso de autenticación de usuarios,
@@ -20,7 +29,7 @@ import { ProcessProcedures } from '../../../commons/class/process-procedures';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, EmailComponent, PasswordComponent, CodeTotpComponent], // Removido QRCodeModule
+  imports: [CommonModule, EmailComponent, PasswordComponent, CodeTotpComponent, LoadingSpinnerComponent], 
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -56,6 +65,12 @@ export class LoginComponent {
   /** boleano para controlar el reset del campo del codigo */
   resetCode: boolean = false;
 
+  showSpinner: boolean = false;
+
+  procedureData: MedicalProcedure[] = [];
+  doctorData: Doctor[] = [];
+  branchData: Branch[] = [];
+
   /**
    * @description Inicializa el componente y configura el formulario reactivo
    * @param authService Servicio para manejar la autenticación
@@ -71,7 +86,9 @@ export class LoginComponent {
     private readonly router: Router,
     private readonly storageService: StorageService,
     private readonly sessionService: SessionService,
-    private readonly procedureService: ProcedureService
+    private readonly procedureService: ProcedureService,
+    private readonly employeeService: EmployeeService,
+    private readonly providerService: ProviderService
   ) {
     this.authService = authService;
     this.patientService = patientService;
@@ -79,6 +96,8 @@ export class LoginComponent {
     this.storageService = storageService;
     this.sessionService = sessionService;
     this.procedureService = procedureService;
+    this.employeeService = employeeService;
+    this.providerService = providerService;
   }
 
   /**
@@ -243,33 +262,8 @@ export class LoginComponent {
             console.log("error")
             this.clearCode();
           } else if (response.nextStep.signInStep == 'DONE') {
-            console.log("Autenticación exitosa, redirigiendo a la página principal")
-            this.procedureService.getProceduresByPatientId(parseInt(this.storageService.getItem("patient")), "PRINCIPAL_PAGE", 3)
-              .pipe(
-                tap((procedures) => {
-                  const doctorIds = [...new Set(procedures.map(p => p.doctorId))];
-                  
-                  ProcessProcedures.classifyAppointments(procedures, this.storageService)
-                }),
-                finalize(() => {
-                  this.sessionService.getLastSession(this.emailValue)
-                    .pipe(
-                      finalize(() => {
-                        this.router.navigate(['/home-patient']);
-                      })
-                    )
-                    .subscribe({
-                      error: (error) => {
-                        console.error('Error:', error);
-                      }
-                    });
-                })
-              )
-              .subscribe({
-                error: (error) => {
-                  console.error('Error:', error);
-                }
-              });
+            this.showSpinner = true;
+            this.handleSuccessfulTotp();
             this.storageService.setItem("email", this.emailValue);
           } else {
             alert("Tempo de secion expirado, debes iniciar el proceso de registro de la aplicacion de nuevo")
@@ -279,7 +273,86 @@ export class LoginComponent {
     }
   }
 
-  
+  private handleSuccessfulTotp() {
+    this.procedureService.getProceduresByPatientId(parseInt(this.storageService.getItem("patient")), "PRINCIPAL_PAGE", 3)
+      .pipe(
+        switchMap((procedures) => {
+          this.procedureData = procedures;
+          if (procedures.length === 0) {
+            return of(null);
+          }
+          return this.consultDoctorsAndBranchesData(procedures);
+        }),
+        finalize(() => this.handleSession())
+      )
+      .subscribe({
+        next: () => {
+          console.log('Todo el proceso completado exitosamente');
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      });
+  }
+
+  private consultDoctorsAndBranchesData(procedures: any): Observable<void> {
+    const doctorIds: number[] = [...new Set((procedures as Array<{ doctorId: number }>).map(p => Number(p.doctorId)))];
+    return this.employeeService.getDoctorByIds(doctorIds).pipe(
+      switchMap((doctors) => {
+        this.doctorData = doctors;
+
+        if (doctors.length === 0) {
+          return of(undefined);
+        }
+
+        return this.handleDoctors(doctors).pipe(
+          // Map the result to void
+          switchMap(() => of(undefined))
+        );
+      })
+    );
+  }
+
+  private handleDoctors(doctors: Doctor[]): Observable<Branch[]> {
+    const branchRequests: BranchRequest[] = Array.from(
+      doctors.reduce((map, doc: Doctor) => {
+        const key = `${doc.company}|${doc.workplace}`;
+        if (!map.has(key)) {
+          map.set(key, { company_id: doc.company.toString(), branch_id: doc.workplace });
+        }
+        return map;
+      }, new Map<string, BranchRequest>()).values()
+    );
+    return this.providerService.getBranchesByIds(branchRequests).pipe(
+      tap((branches) => {
+        this.branchData = branches;
+        const targetProcedures: TargetProcedure[] = ProcessProcedures.createTargetProcedureList(
+          this.procedureData,
+          this.doctorData,
+          this.branchData
+        );
+        ProcessProcedures.classifyAppointments(targetProcedures, this.storageService);
+      })
+    );
+  }
+
+  private handleSession() {
+    this.sessionService.getLastSession(this.emailValue)
+      .pipe(
+        //tap((lastSession) => {
+        finalize(() => {
+          this.showSpinner = false;
+          this.router.navigate(['/home-patient']);
+        })
+      )
+      .subscribe({
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      });
+  }
+
+
 
   /**
    * @description Configura la inscripción MFA generando el código QR

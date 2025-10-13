@@ -17,7 +17,10 @@ const environmentFile = `export const environment = {
     apiUrl: '${process.env.PATIENT_CT_API_URL || "http://localhost:3000"}'
   }, 
   url_get_session: '${process.env.URL_GET_SESSION || "http://localhost:3000/get-session"}',
-  procedure_api_url: '${process.env.PROCEDURE_API_URL || "http://localhost:8070/api/procedure"}'
+  procedure_api_url: '${process.env.PROCEDURE_API_URL || "http://localhost:8070/api/procedure"}',
+  employee_api_url: '${process.env.EMPLOYEE_API_URL || "http://localhost:3001/api/v1/employee"}',
+  provider_api_url: '${process.env.PROVIDER_API_URL || "http://localhost:3002/api/v1/provider"}',
+  secretKey: '${process.env.SECRET_KEY || "default-secret-key"}'
 };
 `;
 

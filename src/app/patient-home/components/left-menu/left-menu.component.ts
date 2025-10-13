@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { PatientService } from '../../../commons/service/graphQL/patient-ct/patient-ct.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
 import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
-import { SessionResponse } from '../../interface/session-response';
+import { SessionResponse } from '../../../login-process/service/session/interface/session-response';
 
 @Component({
   selector: 'app-left-menu',

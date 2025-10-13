@@ -1,0 +1,23 @@
+<section>
+    <div class="upcoming-procedures">
+        <h2>Próximos Procedimientos ({{ upcomingAppointments.length }})</h2>
+        <div class="cards-grid">
+            <app-procedures-target *ngFor="let cita of upcomingAppointments" [procedureData]="cita" [isUpcoming]="true">
+            </app-procedures-target>
+        </div>
+        <div *ngIf="upcomingAppointments.length === 0" class="empty-state">
+            <p>No tienes próximas citas programadas</p>
+        </div>
+    </div>
+
+    <div class="last-procedures">
+        <h2>Procedimientos Anteriores ({{ previousAppointments.length }})</h2>
+        <div class="cards-grid">
+            <app-procedures-target *ngFor="let cita of previousAppointments" [procedureData]="cita" [isUpcoming]="false">
+            </app-procedures-target>
+        </div>
+        <div *ngIf="previousAppointments.length === 0" class="empty-state">
+            <p>No tienes procedimientos anteriores</p>
+        </div>
+    </div>
+</section>

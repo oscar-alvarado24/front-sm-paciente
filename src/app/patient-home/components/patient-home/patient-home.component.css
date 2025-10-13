@@ -1,19 +1,20 @@
 .patient-home-container {
   display: grid;
-  grid-template-rows: auto 1fr; /* 2 filas: auto para options-menu, 1fr para el resto */
-  min-height: calc(100vh - 120px); /* Resta la altura del header fijo */
+  grid-template-rows: auto 1fr;
+  min-height: 0;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   width: 100%;
-  border: none; /* Eliminar cualquier borde */
-  box-shadow: none; /* Eliminar cualquier sombra */
-  background: transparent; /* Fondo transparente */
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  max-height: min-content;
 }
 
-/* Primera fila: Menú de opciones horizontal */
 .options-menu {
-  grid-row: 1; /* Primera fila */
+  grid-row: 1;
+  /* Primera fila */
   width: 100%;
   background-color: #f1f1f1;
   margin: 0;
@@ -21,71 +22,61 @@
   border: none;
   box-sizing: border-box;
   position: sticky;
-  top: 0px; 
+  top: 0px;
 }
 
-/* Segunda fila: Contenido principal */
 .main-content {
-  grid-row: 2; /* Segunda fila */
+  grid-row: 2;
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 20px;
   padding: 20px;
-  min-height: 500px;
-  overflow: auto; /* Para manejar contenido que desborde */
+  min-height: 0;
+  overflow: auto;
+  max-height: auto;
 }
 
 .left-menu {
   grid-column: 1;
-  /* Remover position fixed y borders */
   padding: 0;
+  align-self: start;
 }
 
 .right-content {
   grid-column: 2;
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 20px;
+  align-content: start
 }
 
-.upcoming-procedures {
-  grid-row: 1;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.last-procedures {
-  grid-row: 2;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .patient-home-container {
-    grid-template-rows: auto 1fr; /* Mantener las 2 filas en móvil */
+    grid-template-rows: auto 1fr;
+    /* Mantener las 2 filas en móvil */
   }
-  
+
   .main-content {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr 1fr;
     gap: 15px;
     padding: 15px;
   }
-  
+
   .left-menu {
     grid-column: 1;
     grid-row: 1;
   }
-  
+
   .right-content {
     grid-column: 1;
     grid-row: 2 / 4;
+    display: flex;
+  }
+
+  .right-content app-wiew-cards-procedure {
+    flex: 1;
+    /* Ocupa todo el espacio disponible */
+    width: 100%;
   }
 }

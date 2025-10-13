@@ -14,7 +14,7 @@
                 </button>
             </div>
         </div>
-        
+
         <div *ngIf="currentState === 'NEW_PASSWORD_REQUIRED'">
             <app-password (passwordsValue)="onPasswordsValue($event)" (passwordValid)="onPasswordValid($event)">
             </app-password>
@@ -22,28 +22,25 @@
                 Cambiar contraseña
             </button>
         </div>
-        
+
         <!-- Sección del código QR  -->
         <div *ngIf="currentState === 'VIEW QR'" class="col">
             <div class="qr-container">
                 <h3>Escanea este código QR con tu aplicación de autenticación</h3>
-                <img 
-                    [src]="qrCodeImage" 
-                    alt="Código QR para configurar MFA" 
-                    *ngIf="qrCodeImage">
-                
+                <img [src]="qrCodeImage" alt="Código QR para configurar MFA" *ngIf="qrCodeImage">
+
                 <!-- Mensaje de carga mientras se genera el QR -->
                 <div *ngIf="!qrCodeImage" class="loading-qr">
                     <p>Generando código QR...</p>
                 </div>
-                
+
                 <!-- Información adicional -->
                 <div class="qr-instructions">
                     <p>Usa aplicaciones como Google Authenticator, Authy o Microsoft Authenticator</p>
                 </div>
             </div>
         </div>
-        
+
         <div *ngIf="currentState === 'VIEW QR' || currentState === 'SEND TOTP CODE'">
             <app-code-totp (codeValid)="onCodeValid($event)" (codeValue)="onCodeValue($event)" [reset]="resetCode">
             </app-code-totp>
@@ -52,5 +49,8 @@
                 Enviar codigo
             </button>
         </div>
+    </div>
+    <div>
+        <app-loading-spinner *ngIf="showSpinner"></app-loading-spinner>
     </div>
 </section>

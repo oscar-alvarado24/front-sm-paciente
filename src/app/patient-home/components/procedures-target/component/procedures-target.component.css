@@ -21,10 +21,25 @@
      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
  }
 
+ .error-header {
+     background: linear-gradient(135deg, #5f5e5e3f 0%, #05050575 100%);
+ }
+
+ .required-header {
+     background: linear-gradient(135deg, #ec6628 0%, #f83c3c 100%);
+ }
+
  .completed-header {
      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
  }
 
+ .cancelled-header {
+     background: linear-gradient(135deg, #8B0000 0%, #FF6B6B 100%);
+ }
+
+ .missed-header {
+     background: linear-gradient(135deg, #f4f803 0%, #f0e68b 100%);
+ }
  .header-top {
      display: flex;
      justify-content: space-between;
@@ -41,12 +56,7 @@
      letter-spacing: 0.5px;
  }
 
- .status-upcoming {
-     background: rgba(255, 255, 255, 0.2);
-     border: 1px solid rgba(255, 255, 255, 0.3);
- }
-
- .status-completed {
+ .status-style {
      background: rgba(255, 255, 255, 0.2);
      border: 1px solid rgba(255, 255, 255, 0.3);
  }
