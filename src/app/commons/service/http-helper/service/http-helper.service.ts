@@ -3,7 +3,7 @@ import { CustomHeaders } from '../interface/custom-headers';
 import { HttpOptions } from '../interface/http-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { CognitoTokenHelper } from '../class/cognito-token-helper';
-import { environment } from '../../../../../environments/environment';
+import { Encrypt } from '../../../class/encrypt';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,7 @@ import { environment } from '../../../../../environments/environment';
 export class HttpHelperService {
 
   constructor() { }
-  private readonly secretKey = environment.secretKey;
   
-  private encryptParam(value: string): string {
-    const encrypted = CryptoJS.AES.encrypt(value, this.secretKey).toString();
-    return encodeURIComponent(encrypted);
-  }
   /**
    * Genera las opciones HTTP con headers comunes
    * @param additionalHeaders Headers adicionales a incluir
@@ -86,10 +81,10 @@ export class HttpHelperService {
         if (Array.isArray(value)) {
           // Para arrays, agregar múltiples parámetros con la misma clave
           value.forEach(item => {
-            httpParams = httpParams.append(key, encrypt ? this.encryptParam(item.toString()) : item.toString());
+            httpParams = httpParams.append(key, encrypt ? Encrypt.encryptParam(item.toString(), true) : item.toString());
           });
         } else {
-          httpParams = httpParams.set(key, encrypt ? this.encryptParam(value.toString()) : value.toString());
+          httpParams = httpParams.set(key, encrypt ? Encrypt.encryptParam(value.toString(), true) : value.toString());
         }
       }
     });

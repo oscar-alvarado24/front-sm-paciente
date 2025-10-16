@@ -2,55 +2,23 @@
     <div class="container position-relative w-50 float-left login_section">
 
         <div *ngIf="currentState === 'INITIAL'">
-            <app-email (emailValid)="onEmailValid($event)" (emailValue)="onEmailValue($event)"></app-email>
-            <app-password (passwordsValue)="onPasswordsValue($event)" (passwordValid)="onPasswordValid($event)">
-            </app-password>
-            <button (click)="signIn()" [disabled]="!isEmailValid || !arePasswordValid">
-                Iniciar Sesión
-            </button>
-            <div class="forgot-password-container">
-                <button type="button" (click)="forgotPassword()" [disabled]="!isEmailValid" class="forgot-password-btn">
-                    ¿Ha olvidado su contraseña?
-                </button>
-            </div>
+            <app-initial-form (currentStateEmitter)="onCurrentState($event)" (qrInscriptionEmitter)="onSharedSecret($event)"></app-initial-form>
         </div>
 
         <div *ngIf="currentState === 'NEW_PASSWORD_REQUIRED'">
-            <app-password (passwordsValue)="onPasswordsValue($event)" (passwordValid)="onPasswordValid($event)">
-            </app-password>
-            <button (click)="changePassword()" [disabled]="!arePasswordValid">
-                Cambiar contraseña
-            </button>
+            <app-change-origin-password (sharedSecretEmmiter)="onSharedSecret($event)" (currentStateEmitter)="onCurrentState($event)"></app-change-origin-password>
         </div>
 
         <!-- Sección del código QR  -->
         <div *ngIf="currentState === 'VIEW QR'" class="col">
-            <div class="qr-container">
-                <h3>Escanea este código QR con tu aplicación de autenticación</h3>
-                <img [src]="qrCodeImage" alt="Código QR para configurar MFA" *ngIf="qrCodeImage">
-
-                <!-- Mensaje de carga mientras se genera el QR -->
-                <div *ngIf="!qrCodeImage" class="loading-qr">
-                    <p>Generando código QR...</p>
-                </div>
-
-                <!-- Información adicional -->
-                <div class="qr-instructions">
-                    <p>Usa aplicaciones como Google Authenticator, Authy o Microsoft Authenticator</p>
-                </div>
-            </div>
+            <app-qr-code (currentStateEmitter)="onCurrentState($event)" [sharedSecret]="sharedSecret" ></app-qr-code>
         </div>
 
         <div *ngIf="currentState === 'VIEW QR' || currentState === 'SEND TOTP CODE'">
-            <app-code-totp (codeValid)="onCodeValid($event)" (codeValue)="onCodeValue($event)" [reset]="resetCode">
-            </app-code-totp>
-
-            <button (click)="sendTotp()" [disabled]="!isCodeValid">
-                Enviar codigo
-            </button>
+            <app-totp-code-process (currentStateEmmiter)="onCurrentState($event)" (totpProcessSuccessfulEmitter)="onTotpProcessSuccessful($event)"></app-totp-code-process>
         </div>
     </div>
-    <div>
-        <app-loading-spinner *ngIf="showSpinner"></app-loading-spinner>
+    <div *ngIf="showSpinner">
+        <app-loading-spinner></app-loading-spinner>
     </div>
 </section>

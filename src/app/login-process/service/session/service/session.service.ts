@@ -31,4 +31,18 @@ export class SessionService {
       })
     );
   }
+
+  saveSession(email: string, ip: string): Observable<any> {
+    const session = JSON.stringify({ email: email, ip: ip });
+    return this.https.post(environment.url_save_session, session)
+    .pipe(
+      tap((response) => {
+        console.log('Sesión guardada exitosamente:', response);
+      }),
+      catchError((error) => {
+        console.error('Error al guardar la sesión:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }

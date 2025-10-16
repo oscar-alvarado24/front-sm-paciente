@@ -1,0 +1,14 @@
+<section>
+    <div class="qr-container">
+        <h3>Escanea este código QR con tu aplicación de autenticación</h3>
+        <img class="qr-code-wrapper" [src]="qrCodeImage" alt="Código QR para configurar MFA" *ngIf="qrCodeImage">
+
+        <div *ngIf="!qrCodeImage" class="loading-text">
+            <p>Generando código QR...</p>
+        </div>
+
+        <div class="qr-info">
+            <p>Usa aplicaciones como Google Authenticator, Authy o Microsoft Authenticator</p>
+        </div>
+    </div>
+</section>

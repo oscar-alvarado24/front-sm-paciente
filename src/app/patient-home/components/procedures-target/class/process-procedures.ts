@@ -3,12 +3,12 @@ import { Doctor } from "../../../../commons/service/employee/interface/employee"
 import { StorageService } from "../../../../commons/service/localStotarage/local-storage.service";
 import { MedicalProcedure } from "../../../../commons/service/procedure/interface/medical-procedure";
 import { Branch } from "../../../../commons/service/provider/interface/provider";
+import { Observable, of } from 'rxjs';
 
 export class ProcessProcedures {
 
 
-    static classifyAppointments(procedures: TargetProcedure[], storageService: StorageService): void {
-        console.log("Classifying procedures:", procedures);
+    static classifyAppointments(procedures: TargetProcedure[], storageService: StorageService): Observable<any> {
         const now = new Date();
         const upcomingList: TargetProcedure[] = [];
         const previousList: TargetProcedure[] = [];
@@ -60,10 +60,13 @@ export class ProcessProcedures {
         // Guardar en almacenamiento local
         storageService.setItem('upcomingProcedures', upcomingList);
         storageService.setItem('lastProcedures', previousList);
+        console.log('Procedures processed successfully');
+        return of({complete: true})
     }
 
-    static createTargetProcedureList(procedures: MedicalProcedure[], doctors: Doctor[], branches: Branch[]): TargetProcedure[] {
+    static createTargetProcedureList(procedures: MedicalProcedure[], doctors: Doctor[], branches: Branch[], storageService: StorageService): Observable<any> {        
         const doctorsMap = new Map(doctors.map(doc => [doc.id, doc]));
+        
         const branchesMap = new Map(branches.map(branch => [branch.branch_id, branch]));
 
         const targets: TargetProcedure[] = [];
@@ -86,6 +89,8 @@ export class ProcessProcedures {
             };
             targets.push(targetProcedure);
         }
-        return targets;
+        const response = this.classifyAppointments(targets, storageService);
+        console.log('La respuesta obtenida es ',response)
+        return response;
     }
 }

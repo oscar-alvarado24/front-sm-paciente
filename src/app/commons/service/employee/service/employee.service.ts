@@ -23,7 +23,7 @@ export class EmployeeService {
   
   getDoctorByIds(doctorsId: number[]): Observable<Doctor[]> {
     const params = { 'ids': doctorsId.join(',') };
-    const options = this.httpHelper.getCompleteHttpOptions(params);
+    const options = this.httpHelper.getCompleteHttpOptions(params,undefined,true,false);
     return this.http.get<Doctor[]>(`${this.baseUrl}/doctors/by-id-list`, options)
       .pipe(
         tap(data => console.log('getDoctorByIds data:', data)),

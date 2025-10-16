@@ -14,7 +14,6 @@ export class ProceduresTargetComponent {
   @Input() isUpcoming: boolean = true;
 
   getHeaderClass(): string {
-    console.log('El estado del procedimiento es:', this.procedureData.status);
     if (this.isUpcoming) {
       switch (this.procedureData.status?.toLowerCase()) {
         case 'required':

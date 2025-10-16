@@ -1,0 +1,8 @@
+<section>
+    <app-code-totp (codeValid)="onCodeValid($event)" (codeValue)="onCodeValue($event)" [reset]="resetCode">
+    </app-code-totp>
+
+    <button (click)="sendTotp()" [disabled]="!isCodeValid">
+        Enviar codigo
+    </button>
+</section>

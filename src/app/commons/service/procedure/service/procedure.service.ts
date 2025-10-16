@@ -22,9 +22,9 @@ export class ProcedureService {
    }
 
   getProceduresByPatientId(patientId: number, request_type: string, size: number = 10): Observable<MedicalProcedure[]> {
-
     const params = { 'request-type': request_type, limit: size.toString() };
-    const options = this.httpHelper.getCompleteHttpOptions(params);
+    const options = this.httpHelper.getCompleteHttpOptions(params,undefined,true,false);
+    console.log("se llega hasta formar la peticion")
     return this.http.get<MedicalProcedure[]>(
       `${this.baseUrl}/get-procedure-by-patient/${patientId}`,
       options

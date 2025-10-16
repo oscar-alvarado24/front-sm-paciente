@@ -15,7 +15,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "qrcode",
-              "dotenv"
+              "dotenv",
+              "crypto-js"
             ],
             "outputPath": "dist/paciente",
             "index": "src/index.html",

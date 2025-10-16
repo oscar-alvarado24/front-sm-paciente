@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, retry, timeout } from 'rxjs';
+import { catchError, Observable, retry, throwError, timeout } from 'rxjs';
 import { HttpHelperService } from '../../http-helper/service/http-helper.service';
 import { BranchRequest } from '../interface/branch-request';
 import { Branch } from '../interface/provider';
@@ -22,17 +22,21 @@ export class ProviderService {
     this.http = http;
   }
 
-  getBranchesByIds(branches: BranchRequest[]): Observable<Branch[]> {
+   getBranchesByIds(branches: BranchRequest[]): Observable<Branch[]> {
     const keys: string[] = branches.map(branch =>
       `${branch.company_id} | ${branch.branch_id}`
     );
     const params = { 'keys': keys.join(',') };
-    const options = this.httpHelper.getCompleteHttpOptions(params);
+    const options = this.httpHelper.getCompleteHttpOptions(params, undefined, true, false);
+    
     return this.http.get<Branch[]>(`${this.baseUrl}/branches`, options)
-    .pipe(
-      retry(2),
-      timeout(5000),
-      //catchError(this.httpHelper.handleError)
-    );
+      .pipe(
+        retry(2),
+        timeout(5000),
+        catchError(error => {
+          console.error('Error en getBranchesByIds:', error);
+          return throwError(() => new Error('Error al obtener branches'));
+        })
+      );
   }
 }
