@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
@@ -20,7 +20,7 @@ import { ProcessBeforeChangeRouteService } from '../../service/process-before-ch
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   /** Estado actual del flujo de autenticación */
   currentState: string = "INITIAL";
@@ -55,6 +55,9 @@ export class LoginComponent {
   ) {
     this.router = router;
   }
+  ngOnInit(): void {
+    console.log("Iniciando el componente de login con currentState en: ", this.currentState )
+  }
   
   onCurrentState(state: string) {
     this.currentState = state;
@@ -75,7 +78,7 @@ export class LoginComponent {
 
 
 
-  loadPatientHomeData(): void {
+  async loadPatientHomeData(): Promise<void> {
     console.log("Cargando datos del paciente")
     this.isLoading = true;
     this.hasErrors = false;
@@ -83,7 +86,6 @@ export class LoginComponent {
 
     this.processBeforeChangeRouteService.executeProcess()
       .pipe(
-        //takeUntil(this.destroy$),
         finalize(()=> this.router.navigate(['home-patient'])))
       .subscribe({
         next: (result) => {

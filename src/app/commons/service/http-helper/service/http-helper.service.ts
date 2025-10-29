@@ -3,14 +3,16 @@ import { CustomHeaders } from '../interface/custom-headers';
 import { HttpOptions } from '../interface/http-options';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { CognitoTokenHelper } from '../class/cognito-token-helper';
-import { Encrypt } from '../../../class/encrypt';
+import { CryptoService } from '../../crypto/crypto.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpHelperService {
 
-  constructor() { }
+  constructor(
+    private readonly cryptoService:CryptoService
+  ) { }
   
   /**
    * Genera las opciones HTTP con headers comunes
@@ -52,16 +54,15 @@ export class HttpHelperService {
    * @param includeAuth Si incluir autorización
    * @returns Opciones HTTP completas
    */
-  getCompleteHttpOptions(
+   async getCompleteHttpOptions(
     params?: { [key: string]: any },
     headers?: CustomHeaders,
-    includeAuth: boolean = true,
-    encryptParams: boolean = true
-  ): HttpOptions {
+    includeAuth: boolean = true
+  ): Promise<HttpOptions> {
     const options: HttpOptions = this.getHttpOptions(headers, includeAuth);
 
     if (params) {
-      options.params = this.createHttpParams(params, encryptParams);
+      options.params = await this.createHttpParams(params);
     }
 
     return options;
@@ -72,25 +73,28 @@ export class HttpHelperService {
    * @param params Objeto con los parámetros
    * @returns HttpParams configurado
    */
-  private createHttpParams(params: { [key: string]: any }, encrypt: boolean): HttpParams {
-    let httpParams = new HttpParams();
+  private async createHttpParams(params: { [key: string]: any }): Promise<HttpParams> {
+  let httpParams = new HttpParams();
 
-    Object.keys(params).forEach(key => {
-      const value = params[key];
-      if (value !== null && value !== undefined && value !== '') {
-        if (Array.isArray(value)) {
-          // Para arrays, agregar múltiples parámetros con la misma clave
-          value.forEach(item => {
-            httpParams = httpParams.append(key, encrypt ? Encrypt.encryptParam(item.toString(), true) : item.toString());
-          });
-        } else {
-          httpParams = httpParams.set(key, encrypt ? Encrypt.encryptParam(value.toString(), true) : value.toString());
+  for (const key of Object.keys(params)) {
+    const value = params[key];
+    if (value !== null && value !== undefined && value !== '') {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          const encryption = await this.cryptoService.encryptAsync(item.toString(),'get');
+          const encode = encodeURIComponent(encryption);
+          httpParams = httpParams.append(key, encode);
         }
+      } else {
+        const encryption = await this.cryptoService.encryptAsync(value.toString(),'get');
+        const encode = encodeURIComponent(encryption);
+        httpParams = httpParams.set(key, encode);
       }
-    });
-
-    return httpParams;
+    }
   }
+
+  return httpParams;
+}
 
   /**
    * Obtiene el token de autorización del almacenamiento

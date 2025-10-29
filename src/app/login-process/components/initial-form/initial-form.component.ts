@@ -6,8 +6,9 @@ import { AuthService } from '../../service/auth/auth.service';
 import { Router } from '@angular/router';
 import { PatientService } from 'src/app/commons/service/graphQL/patient-st/patient-st.service';
 import { StorageService } from '../../../commons/service/localStotarage/local-storage.service';
-import { Encrypt } from '../../../commons/class/encrypt';
-
+import { CryptoService} from '../../../commons/service/crypto/crypto.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-initial-form',
   standalone: true,
@@ -33,17 +34,15 @@ export class InitialFormComponent {
   /** boleano para determinar si se cumplen todos los condicionales para el email*/
   isEmailValid: boolean = false;
 
+  destroy$ = new Subject<void>();
+
   constructor(
     private readonly authService: AuthService,
     private readonly patientService: PatientService,
     private readonly router: Router,
     private readonly storageService: StorageService,
-  ) {
-    this.authService = authService;
-    this.patientService = patientService;
-    this.router = router;
-    this.storageService = storageService;
-   }
+    private readonly cryptoService: CryptoService
+  ) {}
 
 
   /**
@@ -86,44 +85,49 @@ export class InitialFormComponent {
      * - Verificación de código TOTP
      */
   signIn() {
-    console.log("Iniciando el proceso de autenticación con email:", this.emailValue);
-    this.patientService.getPatient(this.emailValue).subscribe({
-      next: (getPatient: any) => {
-        console.log(getPatient);
-        this.storageService.setItem("patient", Encrypt.encryptParam(getPatient.id.toString(),false));
-        console.log(getPatient.id);
-        this.storageService.setItem("photo", Encrypt.encryptParam(getPatient.photo,false));
-        console.log(getPatient.status);
-        switch (getPatient.status) {
-          case 'usuario_activo':
-            console.log('Usuario activo, iniciando sesión');
-            this.startFlowSesion();
-            break;
-          case 'usuario_inactivo':
-            alert('Usuario inactivo, valida con tu empresa el pago de tus aportes');
-            break;
-          case 'usurio_retirado':
-            alert('Usuario retirado');
-            break;
-          default:
-            alert('Error interno.');
-            break;
-
+    
+    this.patientService.getPatient(this.emailValue)
+      .pipe(takeUntil(this.destroy$)) 
+      .subscribe({
+        next: async (getPatient: any) => {
+          
+          try {
+            this.storageService.setItem("photo", await this.cryptoService.encryptAsync(getPatient.photo));
+            this.storageService.setItem("patient", await this.cryptoService.encryptAsync(getPatient.id.toString()));
+                        
+            switch (getPatient.status) {
+              case 'usuario_activo':
+                console.log('Usuario activo, iniciando sesión');
+                this.startFlowSesion();
+                break;
+              case 'usuario_inactivo':
+                alert('Usuario inactivo, valida con tu empresa el pago de tus aportes');
+                break;
+              case 'usuario_retirado': 
+                alert('Usuario retirado');
+                break;
+              default:
+                alert('Error interno.');
+                break;
+            }
+          } catch (encryptionError) {
+            console.error('Error al encriptar datos:', encryptionError);
+            alert('Error al procesar los datos de usuario');
+          }
+        },
+        error: (error: any) => {
+          console.error('Error al validar el email:', error);
         }
-      },
-      error: (error: any) => {
-        console.error('Error al validar el email:', error);
-      }
-    });
+      });
   }
 
   startFlowSesion() {
     this.authService.signIn(
       this.emailValue,
       this.passwordData!.password
-    ).then(response => {
+    ).then(async response => {
       if (response !== undefined) {
-        this.storageService.setItem("email",Encrypt.encryptParam(this.emailValue,false));
+        this.storageService.setItem("email",await this.cryptoService.encryptAsync(this.emailValue.toString()));
         switch (response.nextStep.signInStep) {
           case "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED":
             console.log("Cambio de contraseña")
@@ -149,11 +153,9 @@ export class InitialFormComponent {
   forgotPassword() {
     this.patientService.validateSesStatus(this.emailValue).subscribe({
       next: (validateSesStatus: any) => {
-        console.log(validateSesStatus);
         switch (validateSesStatus) {
           case 'Email_verificado':
             this.authService.handleResetPassword(this.emailValue).then(response => {
-              console.log(response)
               if (response.status == "correct") {
                 this.router.navigate(['change-password']);
               } else {

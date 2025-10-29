@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StorageService } from './local-storage.service';
+import { CryptoService } from './crypto.service';
 
-describe('LocalStorageService', () => {
-  let service: StorageService;
+describe('CryptoService', () => {
+  let service: CryptoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(StorageService);
+    service = TestBed.inject(CryptoService);
   });
 
   it('should be created', () => {

@@ -1,3 +1,6 @@
 {
-    "CodeGPT.apiKey": "LM Studio"
+    "CodeGPT.apiKey": "LM Studio",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

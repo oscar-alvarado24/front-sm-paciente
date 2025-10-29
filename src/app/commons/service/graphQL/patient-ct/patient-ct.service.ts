@@ -11,7 +11,7 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService extends BaseService {
+export class PatientCtService extends BaseService {
   // Subjects para manejo de estado
   private readonly savePhotoResponseSubject = new BehaviorSubject<any>(null);
   savePhoto$ = this.savePhotoResponseSubject.asObservable();

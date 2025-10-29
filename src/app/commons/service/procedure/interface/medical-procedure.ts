@@ -1,6 +1,6 @@
 export interface MedicalProcedure {
     name: string;
-    doctorId: number;
+    doctorId: string;
     date: string;
     observations: string;
     status: string;

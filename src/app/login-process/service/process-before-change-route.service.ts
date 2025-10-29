@@ -9,13 +9,13 @@ import { GetAndSaveSessionService } from './get-and-save-session/get-and-save-se
 export class ProcessBeforeChangeRouteService {
 
   constructor(
-    private readonly procedureService: GetAndProcessProcedureService,
+    private readonly processProcedureService: GetAndProcessProcedureService,
     private readonly getAndaveSessionService: GetAndSaveSessionService
   ) { }
 
   executeProcess() {
     return forkJoin({
-      procedureFlow: this.procedureService.startFlowForGetProcedures().pipe(
+      procedureFlow: this.processProcedureService.startFlowForGetProcedures().pipe(
         map((procedure: { complete: any; }) => {
           if (procedure) {
             if (procedure.complete) {

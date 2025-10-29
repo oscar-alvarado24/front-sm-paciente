@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from
 import * as QRCode from 'qrcode';
 import { AuthService } from '../../service/auth/auth.service';
 import { StorageService } from '../../../commons/service/localStotarage/local-storage.service';
-import { Encrypt } from '../../../commons/class/encrypt';
+import { CryptoService } from '../../../commons/service/crypto/crypto.service';
 
 @Component({
   selector: 'app-qr-code',
@@ -25,11 +25,9 @@ export class QrCodeComponent implements OnChanges {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly storageService: StorageService
-  ) {
-    this.authService = authService;
-    this.storageService = storageService;
-  }
+    private readonly storageService: StorageService,
+    private readonly cryptoService: CryptoService
+  ) {}
 
   /**
    * @description Genera el código QR a partir de la URL
@@ -62,7 +60,7 @@ export class QrCodeComponent implements OnChanges {
   }
 
   private async enableToptAndshowQrCode(sharedSecret: string) {
-    this.authService.enableTOTP(Encrypt.decryptParam(this.storageService.getItem('email')), sharedSecret);
+    this.authService.enableTOTP(await this.cryptoService.decryptAsync(this.storageService.getItem('email')), sharedSecret);
 
     this.qrCodeUrl = this.authService.qrCodeUrl;
     // Generar la imagen del QR code

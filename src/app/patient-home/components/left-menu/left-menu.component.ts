@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { PatientService } from '../../../commons/service/graphQL/patient-ct/patient-ct.service';
+import { PatientCtService } from '../../../commons/service/graphQL/patient-ct/patient-ct.service';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
 import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 import { SessionResponse } from '../../../login-process/service/session/interface/session-response';
+import { CryptoService } from '../../../commons/service/crypto/crypto.service';
 
 @Component({
   selector: 'app-left-menu',
@@ -23,23 +24,31 @@ export class LeftMenuComponent implements OnInit {
   sessionInfo: SessionResponse |null = null;
   sessionValue: SessionResponse | string | null = null;
 
-  constructor(private readonly patientService: PatientService, 
-    private readonly storageService: StorageService) {
-    this.patientService = patientService;
-    this.storageService = storageService;
-    
-  }
+  constructor(
+    private readonly patientService: PatientCtService, 
+    private readonly storageService: StorageService,
+    private readonly cryptoService: CryptoService  
+  ) 
+    {}
 
-  ngOnInit(): void {
-    this.email = this.storageService.getItem("email");
-    this.imagenPerfil = this.storageService.getItem("photo");
+  async ngOnInit(): Promise<void> {
+    this.email = await this.cryptoService.decryptAsync(this.storageService.getItem("email"));
+    this.imagenPerfil = await this.cryptoService.decryptAsync(this.storageService.getItem("photo"));
     this.sessionValue = this.storageService.getItem('session');
     console.log('sessionValue:', this.sessionValue);
     if (this.sessionValue && typeof this.sessionValue === 'object') {
-      console.log('sessionValue es un objeto:');
-      this.sessionInfo = this.sessionValue ;
+      this.sessionInfo = {
+        city: this.sessionValue.city,
+        connectionTime: this.sessionValue.connectionTime,
+        country: await this.cryptoService.decryptAsync(this.sessionValue.country!),
+        email: this.email,
+        ip: await this.cryptoService.decryptAsync(this.sessionValue.ip!),
+        latitude: await this.cryptoService.decryptAsync(this.sessionValue.latitude!),
+        longitude: await this.cryptoService.decryptAsync(this.sessionValue.longitude!),
+        timezone: this.sessionValue.timezone
     }
   }
+}
   
   
   seleccionarImagen(): void {
@@ -73,11 +82,11 @@ export class LeftMenuComponent implements OnInit {
       this.imagenPerfil = base64;
       this.patientService.savePhoto(this.imagenPerfil, this.email)
         .subscribe({
-          next: (result) => {
+          next: (result: any) => {
             console.log('Foto guardada con éxito:', result);
             // Aquí puedes manejar la respuesta exitosa
           },
-          error: (error) => {
+          error: (error: any) => {
             console.error('Error al guardar la foto:', error);
             // Aquí puedes manejar el error
           }

@@ -73,10 +73,14 @@
               "browserTarget": "paciente:build:production"
             },
             "development": {
-              "browserTarget": "paciente:build:development"
+              "browserTarget": "paciente:build:development",
+              "proxyConfig": "proxy.conf.cjs"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.cjs"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

@@ -4,6 +4,7 @@ import { Observable, catchError, tap, throwError, of } from 'rxjs';
 import { SessionResponse } from '../interface/session-response';
 import { environment } from 'src/environments/environment';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
+import { HttpHelperService } from '../../../../commons/service/http-helper/service/http-helper.service';
 
 
 @Injectable({
@@ -11,13 +12,16 @@ import { StorageService } from 'src/app/commons/service/localStotarage/local-sto
 })
 export class SessionService {
 
-  constructor(private readonly https: HttpClient,private readonly storageService: StorageService) { }
+  constructor(
+    private readonly https: HttpClient,
+    private readonly httpHelper: HttpHelperService,
+    private readonly storageService: StorageService) { }
 
   getLastSession(email: string): Observable<SessionResponse | null> {
-    const requestBody = { email: email };
+    const body = { email: email };
     return this.https.post<SessionResponse>(
       environment.url_get_session,
-      requestBody
+      body
     ).pipe(
       tap((sessionInfo) =>  this.storageService.setItem('session', sessionInfo)),
       catchError((error) => {
