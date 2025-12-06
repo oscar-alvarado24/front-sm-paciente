@@ -7,12 +7,8 @@ import { ChangeOriginPasswordComponent } from '../change-origin-password/change-
 import { QrCodeComponent } from '../qr-code/qr-code.component';
 import { TotpCodeProcessComponent } from '../totp-code-process/totp-code-process.component';
 import { finalize, Subject, takeUntil } from 'rxjs';
-import { ProcessBeforeChangeRouteService } from '../../service/process-before-change-route.service';
+import { ProcessBeforeChangeRouteService } from '../../service/process-before-change-route/process-before-change-route.service';
 
-/**
- * @description Componente que maneja el proceso de autenticación de usuarios,
- * incluyendo login inicial, cambio de contraseña y configuración de autenticación MFA
- */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -22,46 +18,30 @@ import { ProcessBeforeChangeRouteService } from '../../service/process-before-ch
 })
 export class LoginComponent implements OnInit {
 
-  /** Estado actual del flujo de autenticación */
   currentState: string = "INITIAL";
-
   sharedSecret: string = "";
-
   totpProcessSuccesful: boolean = false;
-
   showSpinner: boolean = false;
-
-  //pruebra siendo login quien consume el servicio:
   isLoading = false;
   proceduresData: any;
   sessionData: any;
   hasErrors = false;
   errorMessages: string[] = [];
-  
+
   private destroy$ = new Subject<void>();
 
-  /**
-   * @description Inicializa el componente y configura el formulario reactivo
-   * @param authService Servicio para manejar la autenticación
-   * @param patientService Servicio para manejar la autenticación
-   * @param router Servicio para la navegación
-   * @param storageService Servicio para manejar el almacenamiento local
-   * @param sessionService Servicio para consumir las lambda de session
-   * @param procedureService Servicio para consumir la api de los procedimientos médicos del paciente
-   */
   constructor(
     private readonly router: Router,
     private readonly processBeforeChangeRouteService: ProcessBeforeChangeRouteService
-  ) {
-    this.router = router;
-  }
+  ) {}
+
   ngOnInit(): void {
-    console.log("Iniciando el componente de login con currentState en: ", this.currentState )
+    console.log("Iniciando el componente de login con currentState en: ", this.currentState)
   }
-  
+
   onCurrentState(state: string) {
     this.currentState = state;
-    console.log ("cambiando el valor de current State :", this.currentState)
+    console.log("cambiando el valor de current State :", this.currentState)
   }
 
   onSharedSecret(sharedSecret: string) {
@@ -71,22 +51,25 @@ export class LoginComponent implements OnInit {
   onTotpProcessSuccessful(success: boolean) {
     this.totpProcessSuccesful = success;
     if(this.totpProcessSuccesful){
-      this.showSpinner=true;
-      this.loadPatientHomeData()
+      this.showSpinner = true;
+      this.loadPatientHomeData();
     }
   }
 
-
-
   async loadPatientHomeData(): Promise<void> {
-    console.log("Cargando datos del paciente")
+    console.log("Cargando datos del paciente");
     this.isLoading = true;
     this.hasErrors = false;
     this.errorMessages = [];
 
     this.processBeforeChangeRouteService.executeProcess()
       .pipe(
-        finalize(()=> this.router.navigate(['home-patient'])))
+        takeUntil(this.destroy$), // Importante: controla la destrucción
+        finalize(() => {
+          this.isLoading = false;
+          this.showSpinner = false;
+        })
+      )
       .subscribe({
         next: (result) => {
           console.log('Datos recibidos:', result);
@@ -98,7 +81,7 @@ export class LoginComponent implements OnInit {
             this.hasErrors = true;
             this.errorMessages.push('Error al cargar procedimientos');
             console.error('Error en procedures:', result.procedureFlow.error);
-    }
+          }
 
           // Procesar resultado de session
           if (result.sessionFlow.success) {
@@ -109,19 +92,21 @@ export class LoginComponent implements OnInit {
             console.error('Error en session:', result.sessionFlow.error);
           }
 
-          this.isLoading = false;
-          this.showSpinner = false;
+          // ✅ SOLO navegar si NO hay errores y todo se completó exitosamente
+          if (!this.hasErrors) {
+            console.log('Navegando a home-patient');
+            this.router.navigate(['home-patient']);
+          } else {
+            console.error('No se puede navegar debido a errores:', this.errorMessages);
+          }
         },
         error: (error) => {
-          // Este error solo ocurriría si falla el forkJoin completamente
           console.error('Error crítico:', error);
           this.hasErrors = true;
           this.errorMessages.push('Error al cargar los datos');
-          this.isLoading = false;
-          this.showSpinner = false;
+          // NO navegar en caso de error
         }
       });
-      
   }
 
   retry(): void {
@@ -131,6 +116,5 @@ export class LoginComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    }
   }
-
+}

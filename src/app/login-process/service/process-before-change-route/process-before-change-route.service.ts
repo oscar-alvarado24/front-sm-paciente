@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, map } from 'rxjs';
-import { GetAndProcessProcedureService } from './getAndprocessProcedureData/get-and-process-procedure.service';
-import { GetAndSaveSessionService } from './get-and-save-session/get-and-save-session.service';
+import { GetAndProcessProcedureService } from '../getAndprocessProcedureData/get-and-process-procedure.service';
+import { GetAndSaveSessionService } from '../get-and-save-session/service/get-and-save-session.service';
 
 @Injectable({
   providedIn: 'root'

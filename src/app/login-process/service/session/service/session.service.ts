@@ -5,6 +5,7 @@ import { SessionResponse } from '../interface/session-response';
 import { environment } from 'src/environments/environment';
 import { StorageService } from 'src/app/commons/service/localStotarage/local-storage.service';
 import { HttpHelperService } from '../../../../commons/service/http-helper/service/http-helper.service';
+import { Location } from '../interface/location';
 
 
 @Injectable({
@@ -36,8 +37,17 @@ export class SessionService {
     );
   }
 
-  saveSession(email: string, ip: string): Observable<any> {
-    const session = JSON.stringify({ email: email, ip: ip });
+  saveSession(email: string, ip: string, location: Location): Observable<any> {
+    const session = JSON.stringify({
+      email: email,
+      ip: ip,
+      city: location.city,
+      country: location.country,
+      localtime: location.localtime,
+      timezone: location.timezone,
+      latitude: location.latitude,
+      longitude: location.longitude
+     });
     return this.https.post(environment.url_save_session, session)
     .pipe(
       tap((response) => {

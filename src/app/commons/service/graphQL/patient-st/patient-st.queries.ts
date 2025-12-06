@@ -5,6 +5,9 @@ export const GET_PATIENT = gql`
       id
       photo
       status
+      firstName
+      firstSurName
+      cellPhone
     }
   }
 `;

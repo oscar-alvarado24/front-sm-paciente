@@ -20,11 +20,15 @@ export class CryptoService {
 
   async encryptAsync(data: string, destiny: string = 'local'): Promise<string> {
 
+    if (destiny === 'local_encrypt') {
+      return this.ENCRYPTION_PREFIX + data;
+    }
+    
     if (data.startsWith(this.ENCRYPTION_PREFIX)) {
       let dataToEncrypt = data.substring(this.ENCRYPTION_PREFIX.length);
-      console.log('data to encript: ', dataToEncrypt)
       return dataToEncrypt;
     }
+
     // Validar clave (debe ser base64 como en tu Java)
     this.validateKey(this.secretKey);
 
@@ -141,7 +145,7 @@ export class CryptoService {
 
   private uint8ArrayToBase64(bytes: Uint8Array): string {
     let binary = '';
-    const chunkSize = 0x8000; 
+    const chunkSize = 0x8000;
 
     for (let i = 0; i < bytes.length; i += chunkSize) {
       const chunk = bytes.subarray(i, i + chunkSize);

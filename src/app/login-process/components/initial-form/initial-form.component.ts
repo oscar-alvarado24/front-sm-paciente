@@ -85,16 +85,20 @@ export class InitialFormComponent {
      * - Verificación de código TOTP
      */
   signIn() {
-    
+
     this.patientService.getPatient(this.emailValue)
-      .pipe(takeUntil(this.destroy$)) 
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: async (getPatient: any) => {
-          
+
           try {
-            this.storageService.setItem("photo", await this.cryptoService.encryptAsync(getPatient.photo));
-            this.storageService.setItem("patient", await this.cryptoService.encryptAsync(getPatient.id.toString()));
-                        
+            this.storageService.setItem("photo", await this.cryptoService.encryptAsync(getPatient.photo, 'local_encrypt'));
+            this.storageService.setItem("patient", await this.cryptoService.encryptAsync(getPatient.id, 'local_encrypt'));
+            this.storageService.setItem("cellphone", await this.cryptoService.encryptAsync(getPatient.cellPhone, 'local_encrypt'));
+            const firstName = await this.cryptoService.decryptAsync(getPatient.firstName);
+            const fisrstSurName = await this.cryptoService.decryptAsync(getPatient.firstSurName);
+            this.storageService.setItem("name", await this.cryptoService.encryptAsync(`${firstName} ${fisrstSurName}` ));
+
             switch (getPatient.status) {
               case 'usuario_activo':
                 console.log('Usuario activo, iniciando sesión');
@@ -103,7 +107,7 @@ export class InitialFormComponent {
               case 'usuario_inactivo':
                 alert('Usuario inactivo, valida con tu empresa el pago de tus aportes');
                 break;
-              case 'usuario_retirado': 
+              case 'usuario_retirado':
                 alert('Usuario retirado');
                 break;
               default:

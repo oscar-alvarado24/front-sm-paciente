@@ -17,59 +17,98 @@ export class WiewCardsProcedureComponent implements OnInit {
   previousProcedures: TargetProcedure[] = [];
   messageUpcomingProcedures: string = '';
   messagePreviousProcedures: string = '';
+
   constructor(private readonly storageService: StorageService) { }
 
   ngOnInit(): void {
-    console.log('metodo ngOnInit')
+    console.log('🎯 [VIEW-CARDS] Iniciando componente');
     this.loadProcedures();
   }
 
   loadProcedures(): void {
-    const upcomingProceduressRegistry = this.storageService.getItem('upcomingProcedures');
-    const previousAppointmentsRegistry = this.storageService.getItem('lastProcedures');
-    if (upcomingProceduressRegistry) {
-      try {
-        const parseDataUpcoming = JSON.parse(upcomingProceduressRegistry);
-        if (Array.isArray(parseDataUpcoming)) {
-          console.log('upcomingProcedures es de tipo array:', upcomingProceduressRegistry)
-          this.upcomingProcedures = upcomingProceduressRegistry;
-          this.messageUpcomingProcedures = '';
-        } else {
-          console.log('upcomingProcedures es de tipo string:', upcomingProceduressRegistry)
-          this.messageUpcomingProcedures = typeof parseDataUpcoming === 'string' ? parseDataUpcoming : JSON.stringify(parseDataUpcoming);
-          this.upcomingProcedures = [];
-        }
-        
-      }
-      catch (error) {
-        console.error('Error al procesar la información:', error);
-        this.messageUpcomingProcedures = 'Error: no se pudo procesar la información, intenta mas tarde';
-        this.upcomingProcedures = [];
-      }
-    } else {
+    console.log('📋 [VIEW-CARDS] Cargando procedimientos desde storage');
+
+    // Cargar próximos procedimientos
+    this.loadUpcomingProcedures();
+
+    // Cargar procedimientos anteriores
+    this.loadPreviousProcedures();
+
+    console.log('✅ [VIEW-CARDS] Carga completada:', {
+      upcoming: this.upcomingProcedures.length,
+      previous: this.previousProcedures.length,
+      upcomingMessage: this.messageUpcomingProcedures,
+      previousMessage: this.messagePreviousProcedures
+    });
+  }
+
+  private loadUpcomingProcedures(): void {
+    const upcomingRegistry = this.storageService.getItem('upcomingProcedures');
+    console.log('🔍 [VIEW-CARDS] upcomingProcedures raw:', upcomingRegistry);
+
+    if (!upcomingRegistry) {
+      console.warn('⚠️ [VIEW-CARDS] No hay datos de upcomingProcedures en storage');
       this.upcomingProcedures = [];
       this.messageUpcomingProcedures = 'No hay procedimientos programados';
+      return;
     }
 
-    if (previousAppointmentsRegistry) {
-      try {
-        const parseDataPrevious = JSON.parse(previousAppointmentsRegistry);
-        if (Array.isArray(parseDataPrevious)) {
-          this.previousProcedures = previousAppointmentsRegistry;
-          this.messagePreviousProcedures = '';
-        } else {
-          this.messageUpcomingProcedures = typeof parseDataPrevious === 'string' ? parseDataPrevious : JSON.stringify(parseDataPrevious);
-          this.previousProcedures = [];
-        }
+    try {
+      const parsed = JSON.parse(upcomingRegistry);
+      console.log('✅ [VIEW-CARDS] upcomingProcedures parseado:', parsed);
+
+      // Verificar si es un array
+      if (Array.isArray(parsed)) {
+        this.upcomingProcedures = parsed as TargetProcedure[];
+        this.messageUpcomingProcedures = '';
+        console.log(`✅ [VIEW-CARDS] ${this.upcomingProcedures.length} próximos procedimientos cargados`);
+      } else {
+        console.warn('⚠️ [VIEW-CARDS] upcomingProcedures no es un array:', typeof parsed);
+        this.upcomingProcedures = [];
+        this.messageUpcomingProcedures = 'Formato de datos inválido';
       }
-      catch (error) {
-        console.error('Error al procesar la información:', error);
-        this.messagePreviousProcedures = 'Error: no se pudo procesar la información, intenta mas tarde';
-        this.previousProcedures = [];
-      }
-    } else {
+    } catch (error) {
+      console.log('ℹ️ [VIEW-CARDS] upcomingProcedures es un mensaje de texto');
+      // Es un mensaje de texto (error o sin datos)
+      this.messageUpcomingProcedures = typeof upcomingRegistry === 'string'
+        ? upcomingRegistry
+        : 'Error al cargar procedimientos';
+      this.upcomingProcedures = [];
+    }
+  }
+
+  private loadPreviousProcedures(): void {
+    const previousRegistry = this.storageService.getItem('lastProcedures');
+    console.log('🔍 [VIEW-CARDS] lastProcedures raw:', previousRegistry);
+
+    if (!previousRegistry) {
+      console.warn('⚠️ [VIEW-CARDS] No hay datos de lastProcedures en storage');
       this.previousProcedures = [];
       this.messagePreviousProcedures = 'No hay procedimientos pasados';
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(previousRegistry);
+      console.log('✅ [VIEW-CARDS] lastProcedures parseado:', parsed);
+
+      // Verificar si es un array
+      if (Array.isArray(parsed)) {
+        this.previousProcedures = parsed as TargetProcedure[];
+        this.messagePreviousProcedures = '';
+        console.log(`✅ [VIEW-CARDS] ${this.previousProcedures.length} procedimientos anteriores cargados`);
+      } else {
+        console.warn('⚠️ [VIEW-CARDS] lastProcedures no es un array:', typeof parsed);
+        this.previousProcedures = [];
+        this.messagePreviousProcedures = 'Formato de datos inválido';
+      }
+    } catch (error) {
+      console.log('ℹ️ [VIEW-CARDS] lastProcedures es un mensaje de texto');
+      // Es un mensaje de texto (error o sin datos)
+      this.messagePreviousProcedures = typeof previousRegistry === 'string'
+        ? previousRegistry
+        : 'Error al cargar procedimientos';
+      this.previousProcedures = [];
     }
   }
 }
