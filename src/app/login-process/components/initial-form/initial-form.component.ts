@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { EmailComponent } from '../email/email.component';
 import { PasswordComponent } from '../password/password.component';
-import { AuthService } from '../../service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/auth.service';
 import { Router } from '@angular/router';
 import { PatientService } from 'src/app/commons/service/graphQL/patient-st/patient-st.service';
 import { StorageService } from '../../../commons/service/localStotarage/local-storage.service';

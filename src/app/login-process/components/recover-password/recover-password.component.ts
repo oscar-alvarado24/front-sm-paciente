@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/auth.service';
 import { EmailComponent } from '../email/email.component';
 
 @Component({
@@ -29,7 +29,7 @@ export class RecoverPasswordComponent {
       this.authService = authService;
       this.router = router;
     }
-  
+
     /**
      * @description Maneja los cambios de estado en el cumplimiento de las condicionales del email desde el componente hijo
      * @param emailIsValid Objeto con el valor del estado del cumplimiento de las condicionales del email
@@ -37,7 +37,7 @@ export class RecoverPasswordComponent {
     onEmailValid(emailIsValid: boolean) {
       this.isEmailValid = emailIsValid;
     }
-  
+
     /**
      * @description Maneja los cambios en el email desde el componente hijo
      * @param email Objeto con el email

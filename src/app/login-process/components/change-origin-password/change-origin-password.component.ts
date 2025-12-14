@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { PasswordComponent } from '../password/password.component';
-import { AuthService } from '../../service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/auth.service';
 
 @Component({
   selector: 'app-change-origin-password',
@@ -21,7 +21,7 @@ export class ChangeOriginPasswordComponent {
 
   constructor(
     private readonly authService: AuthService
-  ) { 
+  ) {
     this.authService = authService;
   }
 

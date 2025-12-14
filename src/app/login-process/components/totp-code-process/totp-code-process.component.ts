@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
-import { AuthService } from '../../service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/auth.service';
 
 @Component({
   selector: 'app-totp-code-process',
@@ -16,10 +16,10 @@ export class TotpCodeProcessComponent {
 
   /** Valor del codigo totp */
     codeValue: string = "";
-  
+
     /** boleano para determinar si se cumplen todos los condicionales para el codigo totp */
     isCodeValid: boolean = false;
-  
+
     /** boleano para controlar el reset del campo del codigo */
     resetCode: boolean = false;
 
@@ -62,7 +62,7 @@ export class TotpCodeProcessComponent {
       if (this.isCodeValid) {
         this.authService.confirmTotpCode(this.codeValue).then(
           async response => {
-            
+
             if (response === undefined) {
               console.log("error")
               this.clearCode();

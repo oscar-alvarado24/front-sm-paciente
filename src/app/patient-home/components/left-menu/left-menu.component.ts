@@ -4,6 +4,8 @@ import { StorageService } from 'src/app/commons/service/localStotarage/local-sto
 import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 import { SessionResponse } from '../../../login-process/service/session/interface/session-response';
 import { CryptoService } from '../../../commons/service/crypto/crypto.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../commons/service/auth/auth.service';
 
 @Component({
   selector: 'app-left-menu',
@@ -15,7 +17,6 @@ import { CryptoService } from '../../../commons/service/crypto/crypto.service';
 export class LeftMenuComponent implements OnInit {
   @Output() perfilClick = new EventEmitter<void>();
   @Output() cambiarContraseñaClick = new EventEmitter<void>();
-  @Output() cerrarSesionClick = new EventEmitter<void>();
   @Output() imagenCambio = new EventEmitter<string>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -25,10 +26,12 @@ export class LeftMenuComponent implements OnInit {
   sessionValue: SessionResponse | string | null = null;
 
   constructor(
-    private readonly patientService: PatientCtService, 
+    private readonly patientService: PatientCtService,
     private readonly storageService: StorageService,
-    private readonly cryptoService: CryptoService  
-  ) 
+    private readonly cryptoService: CryptoService,
+    private readonly router: Router,
+    private readonly authService: AuthService
+  )
     {}
 
   async ngOnInit(): Promise<void> {
@@ -49,8 +52,8 @@ export class LeftMenuComponent implements OnInit {
     }
   }
 }
-  
-  
+
+
   seleccionarImagen(): void {
     this.fileInput.nativeElement.click();
   }
@@ -112,19 +115,19 @@ export class LeftMenuComponent implements OnInit {
 
   get date(): string {
     const fecha: Date = new Date( this.sessionInfo?.connectionTime || Date.now());
-    
+
     const fechaLocal: string = fecha.toLocaleDateString('es-ES', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     });
-    
+
     const horaLocal: string = fecha.toLocaleTimeString('es-ES', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false
     });
-    
+
     return `${fechaLocal} ${horaLocal}`;
   }
 
@@ -145,7 +148,10 @@ export class LeftMenuComponent implements OnInit {
   changePassword() {
     this.cambiarContraseñaClick.emit();
   }
-  logOut() {
-    this.cerrarSesionClick.emit();
+
+  async logOut() {
+    await this.authService.signOut();
+    this.storageService.clear();
+    this.router.navigate(['/login']);
   }
 }

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { roleGuard } from './login.guard';
-import { AuthService } from '../service/auth/auth.service';
+import { AuthService } from '../../commons/service/auth/auth.service';
 
 describe('roleGuard', () => {
   let mockRouter: jasmine.SpyObj<Router>;

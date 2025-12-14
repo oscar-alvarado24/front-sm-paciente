@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
 import * as QRCode from 'qrcode';
-import { AuthService } from '../../service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/auth.service';
 import { StorageService } from '../../../commons/service/localStotarage/local-storage.service';
 import { CryptoService } from '../../../commons/service/crypto/crypto.service';
 

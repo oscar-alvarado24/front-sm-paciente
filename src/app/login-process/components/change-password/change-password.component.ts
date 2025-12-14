@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/login-process/service/auth/auth.service';
+import { AuthService } from 'src/app/commons/service/auth/auth.service';
 import { EmailComponent } from '../email/email.component';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
 import { CountdownComponent } from '../countdown/countdown.component';
@@ -99,7 +99,7 @@ export class ChangePasswordComponent {
     // Volver a false para futuros resets
     setTimeout(() => this.resetCode = false, 0);
   }
-  
+
   startCountdown() {
     this.startCountDown = true;
     // Volver a false para futuros resets
