@@ -1,4 +1,5 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { dirname } from 'path';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,7 +28,21 @@ const environmentFile = `export const environment = {
 };
 `;
 
-writeFileSync('./src/environments/environment.ts', environmentFile);
+// Ruta del archivo
+const filePath = './src/environments/environment.ts';
+
+// Obtener el directorio (sin el nombre del archivo)
+const dir = dirname(filePath);
+
+// Verificar si la carpeta existe, si no, crearla
+if (!existsSync(dir)) {
+  mkdirSync(dir, { recursive: true }); // recursive: true crea carpetas anidadas si es necesario
+  console.log(`📁 Carpeta creada: ${dir}`);
+}
+
+// Escribir el archivo
+writeFileSync(filePath, environmentFile);
+
 console.log('✅ Environment file generated successfully');
 console.log('📋 Configuration:');
 console.log('  - Production:', process.env.PRODUCTION === 'true' ? true : false);
