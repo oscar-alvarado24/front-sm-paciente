@@ -60,17 +60,9 @@ export class MultiApolloService {
       'Content-Type': 'application/json'
     };
 
-    const token = this.getAuthToken();
-    if (token) {
-      commonHeaders['Authorization'] = `Bearer ${token}`;
-    }
-
     const serviceHeaders: Record<string, Record<string, string>> = {
       patient_st: { 'X-Patient-Service': 'v1' },
-      patient_ct: { 'X-Patient-Service': 'v1' },
-      users: { 'X-User-Service': 'v1' },
-      orders: { 'X-Order-Service': 'v1' },
-      products: { 'X-Product-Service': 'v1' }
+      patient_ct: { 'X-Patient-Service': 'v1' }
     };
 
     return {
@@ -92,7 +84,7 @@ export class MultiApolloService {
           Patient: {
             keyFields: ['id'],
             fields: {
-              photo: { merge: false }, // No cachear fotos
+              photo: { merge: false }, 
             }
           }
         }
@@ -122,9 +114,5 @@ export class MultiApolloService {
         errorPolicy: 'none' as const,
       }
     };
-  }
-
-  private getAuthToken(): string {
-    return localStorage.getItem('authToken') || '';
   }
 }
