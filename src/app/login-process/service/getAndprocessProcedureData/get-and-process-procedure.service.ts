@@ -68,6 +68,15 @@ export class GetAndProcessProcedureService {
 
         catchError(error => {
           console.error('❌ [PROCEDURES] Error crítico:', error);
+          console.log('❌ [PROCEDURES] Error status:', error?.status);
+          console.log('❌ [PROCEDURES] Error completo:', JSON.stringify(error));
+
+          // Si es 404, no hay procedimientos
+          if (error?.status === 404 || error?.error?.status === 404) {
+            console.log('ℹ️ [PROCEDURES] 404 - No hay procedimientos para este paciente');
+            this.setEmptyProceduresMessages();
+            return of({ complete: true, message: 'No hay procedimientos' });
+          }
           this.setErrorMessages();
           return of({ complete: false, error: error.message || 'Error desconocido' });
         })
@@ -290,12 +299,20 @@ export class GetAndProcessProcedureService {
       }
 
       console.log(`📊 [ORGANIZE] Datos disponibles:
-        - Procedimientos: ${this.procedureData.length}
-        - Doctores: ${this.doctorData.length}
-        - Branches: ${this.branchData.length}
-        - DoctorMap: ${this.doctorProcedureMap.size}
-        - CompanyMap: ${this.companyMap.size}`);
+      - Procedimientos: ${this.procedureData?.length || 0} items
+      - Doctores: ${this.doctorData?.length || 0} items
+      - Branches: ${this.branchData?.length || 0} items
+      - DoctorMap: ${Object.keys(this.doctorProcedureMap || {}).length} keys
+      - CompanyMap: ${Object.keys(this.companyMap || {}).length} keys`);
 
+      // Si necesitas ver el contenido completo:
+      console.log('📋 Detalles completos:', {
+        procedureData: this.procedureData,
+        doctorData: this.doctorData,
+        branchData: this.branchData,
+        doctorProcedureMap: this.doctorProcedureMap,
+        companyMap: this.companyMap
+      });
       // Ejecutar organización
       const result = this.organiceDataService.createTargetProcedureList(
         this.procedureData,

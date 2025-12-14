@@ -29,9 +29,6 @@ export class ProcedureService {
         ),
         timeout(30000),
         retry(2),
-        catchError(error =>
-          HandleProcedureError.handleProcedureError(error, `get-procedure-patient-${patient}`)
-        )
       );
   }
 }

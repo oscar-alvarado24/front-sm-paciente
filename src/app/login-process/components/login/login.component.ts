@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly processBeforeChangeRouteService: ProcessBeforeChangeRouteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     console.log("Iniciando el componente de login con currentState en: ", this.currentState)
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
   onTotpProcessSuccessful(success: boolean) {
     this.totpProcessSuccesful = success;
-    if(this.totpProcessSuccesful){
+    if (this.totpProcessSuccesful) {
       this.showSpinner = true;
       this.loadPatientHomeData();
     }
@@ -64,47 +64,22 @@ export class LoginComponent implements OnInit {
 
     this.processBeforeChangeRouteService.executeProcess()
       .pipe(
-        takeUntil(this.destroy$), // Importante: controla la destrucción
+        takeUntil(this.destroy$),
         finalize(() => {
-          this.isLoading = false;
-          this.showSpinner = false;
+          console.log('Navegando a home-patient inmediatamente');
+          this.router.navigate(['home-patient']);
         })
       )
       .subscribe({
         next: (result) => {
           console.log('Datos recibidos:', result);
-
-          // Procesar resultado de procedures
-          if (result.procedureFlow.success) {
-            console.log('Procedures cargados correctamente');
-          } else {
-            this.hasErrors = true;
-            this.errorMessages.push('Error al cargar procedimientos');
-            console.error('Error en procedures:', result.procedureFlow.error);
-          }
-
-          // Procesar resultado de session
-          if (result.sessionFlow.success) {
-            console.log('Session cargada correctamente');
-          } else {
-            this.hasErrors = true;
-            this.errorMessages.push('Error al cargar sesión');
-            console.error('Error en session:', result.sessionFlow.error);
-          }
-
-          // ✅ SOLO navegar si NO hay errores y todo se completó exitosamente
-          if (!this.hasErrors) {
-            console.log('Navegando a home-patient');
-            this.router.navigate(['home-patient']);
-          } else {
-            console.error('No se puede navegar debido a errores:', this.errorMessages);
-          }
         },
         error: (error) => {
           console.error('Error crítico:', error);
-          this.hasErrors = true;
-          this.errorMessages.push('Error al cargar los datos');
-          // NO navegar en caso de error
+        },
+        complete: () => {
+          this.isLoading = false;
+          //this.showSpinner = false;
         }
       });
   }

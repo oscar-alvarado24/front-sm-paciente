@@ -140,7 +140,8 @@ export class GetAndSaveSessionService {
       switchMap((patientResponse: string) => {
         const ses_verified_result = patientResponse === 'Email_verificado';
         console.log('📧 SES verificado:', ses_verified_result);
-
+        return of(ses_verified_result);
+/*
         return forkJoin({
           name: from(this.cryptoService.encryptAsync(this.storageService.getItem("name"))),
           cellphone: from(this.cryptoService.encryptAsync(this.storageService.getItem("cellphone"))),
@@ -154,9 +155,10 @@ export class GetAndSaveSessionService {
               name: name,
               cellphone: cellphone
             };
-            return this.sendLoginMessage(ses_verified_result, patientData, ipData, ip, geographic_location);
+            //return this.sendLoginMessage(ses_verified_result, patientData, ipData, ip, geographic_location);
+            return { complete: true, values: { ses_verified_result, patientData, ipData, ip, geographic_location }}; // Deshabilitado temporalmente
           })
-        );
+        );*/
       }),
       catchError(error => {
         console.error('❌ Error en sessionNotificateFlow:', error);
