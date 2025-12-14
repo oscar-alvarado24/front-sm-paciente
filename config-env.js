@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const environmentFile = `export const environment = {
-  production: '${process.env.PRODUCTION || "false"}',
+  production: ${process.env.PRODUCTION === 'true' ? true : false},
   cognito: {
     userPoolId: '${process.env.COGNITO_USER_POOL_ID || "default-pool-id"}',
     userPoolClientId: '${process.env.COGNITO_CLIENT_ID || "default-client-id"}',
@@ -28,3 +28,8 @@ const environmentFile = `export const environment = {
 `;
 
 writeFileSync('./src/environments/environment.ts', environmentFile);
+console.log('✅ Environment file generated successfully');
+console.log('📋 Configuration:');
+console.log('  - Production:', process.env.PRODUCTION === 'true' ? true : false);
+console.log('  - Patient ST API:', process.env.PATIENT_ST_API_URL || 'http://localhost:8080/graphql');
+console.log('  - Patient CT API:', process.env.PATIENT_CT_API_URL || 'http://localhost:8080/graphql');
