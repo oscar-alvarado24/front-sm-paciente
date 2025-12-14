@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
-import { AuthService } from '../../../commons/service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/service/auth.service';
 
 @Component({
   selector: 'app-totp-code-process',

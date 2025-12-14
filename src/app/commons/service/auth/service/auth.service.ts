@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { confirmSignIn, signIn, resetPassword, type ResetPasswordOutput, confirmResetPassword, ConfirmResetPasswordInput, fetchAuthSession, signOut } from '@aws-amplify/auth';
-import { CognitoResponse } from 'src/app/login-process/model/cognito-response';
-import { PasswordChangeResponse } from '../../../login-process/model/password-change-response';
+import { CognitoResponse } from '../interface/cognito-response';
+import { PasswordChangeResponse } from '../interface/password-change-response';
 
 
 

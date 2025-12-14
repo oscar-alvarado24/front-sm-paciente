@@ -5,7 +5,7 @@ import { SHARED_IMPORTS } from 'src/app/commons/shared-imports';
 import { SessionResponse } from '../../../login-process/service/session/interface/session-response';
 import { CryptoService } from '../../../commons/service/crypto/crypto.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../commons/service/auth/auth.service';
+import { AuthService } from '../../../commons/service/auth/service/auth.service';
 
 @Component({
   selector: 'app-left-menu',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/commons/service/auth/auth.service';
+import { AuthService } from 'src/app/commons/service/auth/service/auth.service';
 import { EmailComponent } from '../email/email.component';
 import { CodeTotpComponent } from '../code-totp/code-totp.component';
 import { CountdownComponent } from '../countdown/countdown.component';
