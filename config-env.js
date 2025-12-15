@@ -4,6 +4,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Ruta del archivo
+const filePath = './src/environments/environment.ts';
+
+// Obtener el directorio (sin el nombre del archivo)
+const dir = dirname(filePath);
+
+// Verificar si la carpeta existe, si no, crearla
+if (!existsSync(dir)) {
+  mkdirSync(dir, { recursive: true }); // recursive: true crea carpetas anidadas si es necesario
+  console.log(`📁 Carpeta creada: ${dir}`);
+}
+
 const environmentFile = `export const environment = {
   production: ${process.env.PRODUCTION === 'true' ? true : false},
   cognito: {
@@ -28,20 +40,16 @@ const environmentFile = `export const environment = {
 };
 `;
 
-// Ruta del archivo
-const filePath = './src/environments/environment.ts';
 
-// Obtener el directorio (sin el nombre del archivo)
-const dir = dirname(filePath);
-
-// Verificar si la carpeta existe, si no, crearla
-if (!existsSync(dir)) {
-  mkdirSync(dir, { recursive: true }); // recursive: true crea carpetas anidadas si es necesario
-  console.log(`📁 Carpeta creada: ${dir}`);
-}
 
 // Escribir el archivo
-writeFileSync(filePath, environmentFile);
+try {
+  writeFileSync(filePath, environmentFile);
+  console.log('✅ Archivo environment.ts creado/actualizado exitosamente');
+} catch (error) {
+  console.error('❌ Error al escribir el archivo:', error);
+  process.exit(1);
+}
 
 console.log('✅ Environment file generated successfully');
 console.log('📋 Configuration:');
