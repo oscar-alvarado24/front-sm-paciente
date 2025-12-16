@@ -4,6 +4,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Verificar directorio actual
+console.log('📍 Directorio actual:', process.cwd());
+console.log('📂 Contenido:', require('fs').readdirSync('.'));
+
 // Ruta del archivo
 const filePath = './src/environments/environment.ts';
 
@@ -11,8 +15,21 @@ const filePath = './src/environments/environment.ts';
 const dir = dirname(filePath);
 
 // Crear el directorio siempre (recursive: true no falla si ya existe)
-mkdirSync(dir, { recursive: true });
-console.log(`📁 Directorio asegurado: ${dir}`);
+try {
+  mkdirSync(dir, { recursive: true });
+  console.log(`📁 Directorio asegurado: ${dir}`);
+} catch (error) {
+  console.error('❌ Error creando directorio:', error);
+  // Intentar crear manualmente
+  try {
+    mkdirSync('src', { recursive: true });
+    mkdirSync('src/environments', { recursive: true });
+    console.log('📁 Directorio creado manualmente');
+  } catch (err) {
+    console.error('❌ Error crítico:', err);
+    process.exit(1);
+  }
+}
 
 const environmentFile = `export const environment = {
   production: ${process.env.PRODUCTION === 'true' ? true : false},
