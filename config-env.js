@@ -1,4 +1,4 @@
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { dirname } from 'path';
 import dotenv from 'dotenv';
 
@@ -6,7 +6,7 @@ dotenv.config();
 
 // Verificar directorio actual
 console.log('📍 Directorio actual:', process.cwd());
-console.log('📂 Contenido:', require('fs').readdirSync('.'));
+console.log('📂 Contenido:', readdirSync('.'));
 
 // Ruta del archivo
 const filePath = './src/environments/environment.ts';
