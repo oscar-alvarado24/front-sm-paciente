@@ -10,11 +10,9 @@ const filePath = './src/environments/environment.ts';
 // Obtener el directorio (sin el nombre del archivo)
 const dir = dirname(filePath);
 
-// Verificar si la carpeta existe, si no, crearla
-if (!existsSync(dir)) {
-  mkdirSync(dir, { recursive: true }); // recursive: true crea carpetas anidadas si es necesario
-  console.log(`📁 Carpeta creada: ${dir}`);
-}
+// Crear el directorio siempre (recursive: true no falla si ya existe)
+mkdirSync(dir, { recursive: true });
+console.log(`📁 Directorio asegurado: ${dir}`);
 
 const environmentFile = `export const environment = {
   production: ${process.env.PRODUCTION === 'true' ? true : false},
