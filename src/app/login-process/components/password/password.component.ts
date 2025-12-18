@@ -19,8 +19,8 @@ export class PasswordComponent implements ControlValueAccessor{
 
   @Output() passwordsValue = new EventEmitter<{password: string, confirmPassword: string}>();
   @Output() passwordValid = new EventEmitter<boolean>()
-  
-  
+
+
   form: FormGroup;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
@@ -30,7 +30,7 @@ export class PasswordComponent implements ControlValueAccessor{
 
   constructor(private readonly fb: FormBuilder) {
     this.form = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16), this.passwordValidator()]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(25), this.passwordValidator()]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
 

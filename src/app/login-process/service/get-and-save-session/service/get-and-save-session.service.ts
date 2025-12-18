@@ -95,8 +95,8 @@ export class GetAndSaveSessionService {
             return of({ complete: false, error: error.message, source: 'save_session' });
           })
         );
-        ipData.location.localtime = this.addAcronyms(date);
-        const notificationFlow$ = this.sessionNotificateFlow(emailEncrypted, ipData).pipe(
+        const formattedDate = this.addAcronyms(date);
+        const notificationFlow$ = this.sessionNotificateFlow(emailEncrypted, ipData, formattedDate).pipe(
           tap(() => console.log('✅ Notificación enviada')),
           catchError(error => {
             console.error('❌ Error en notificationFlow:', error);
@@ -132,7 +132,7 @@ export class GetAndSaveSessionService {
     );
   }
 
-  sessionNotificateFlow(encryptedEmail: string, ipData: IpData): Observable<any> {
+  sessionNotificateFlow(encryptedEmail: string, ipData: IpData, formattedDate: string): Observable<any> {
     console.log('📧 Starting sessionNotificateFlow');
 
     return this.patientService.validateSesStatus(encryptedEmail).pipe(
@@ -154,7 +154,7 @@ export class GetAndSaveSessionService {
               name: name,
               cellphone: cellphone
             };
-            return this.sendLoginMessage(ses_verified_result, patientData, ipData, ip, geographic_location);
+            return this.sendLoginMessage(ses_verified_result, patientData, formattedDate, ip, geographic_location);
           })
         );
       }),
@@ -165,16 +165,16 @@ export class GetAndSaveSessionService {
     );
   }
 
-  sendLoginMessage(ses_verified_result: boolean, patientData: any, ipData: IpData, ip: string, geographic_location: string): Observable<any> {
+  sendLoginMessage(ses_verified_result: boolean, patientData: any, dateHour: string, ip: string, geographic_location: string): Observable<any> {
     console.log('📤 Enviando mensaje de login a SQS');
 
     const loginMessage = {
       message_type: 'login',
-      channels: 'email-cellphone',
+      channels: 'email',
       patient_email: patientData.email,
       cellphone: patientData.cellphone,
       patient_name: patientData.name,
-      date_hour: ipData.location.localtime.replace('T', ' '),
+      date_hour: dateHour,
       ip: ip,
       geographic_location: geographic_location,
       ses_verified: ses_verified_result
@@ -192,7 +192,7 @@ export class GetAndSaveSessionService {
 
   processDate(dateService: string, timezone: string): string {
 
-    const fecha = new Date(dateService+'Z');
+    const fecha = new Date(dateService + 'Z');
 
     // Formatear con la zona horaria específica
     const opciones: Intl.DateTimeFormatOptions = {
@@ -211,17 +211,30 @@ export class GetAndSaveSessionService {
   }
 
   addAcronyms(dateString: string): string {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
+    // Parsear manualmente el formato "dd/MM/yyyy, HH:mm:ss" que devuelve processDate()
+    const [datePart, timePart] = dateString.split(', ');
+
+    if (!datePart || !timePart) {
+      console.error('❌ Formato de fecha inválido:', dateString);
+      return 'Invalid Date';
+    }
+
+    const [day, month, year] = datePart.split('/');
+    const [hoursStr, minutesStr, secondsStr] = timePart.split(':');
+
+    // Validar que todos los valores existen
+    if (!day || !month || !year || !hoursStr || !minutesStr || !secondsStr) {
+      console.error('❌ Partes de fecha incompletas:', dateString);
+      return 'Invalid Date';
+    }
+
+    const hours = parseInt(hoursStr);
+    const minutes = minutesStr;
+    const seconds = secondsStr;
 
     // Determinar acrónimo
     let acronym: string;
-    if (hours === 0 && minutes === '00' ) {
+    if (hours === 0 && minutes === '00') {
       acronym = 'AM';
     } else if (hours === 12 && minutes === '00' && seconds === '00') {
       acronym = 'M';
@@ -234,6 +247,10 @@ export class GetAndSaveSessionService {
     // Convertir a formato 12 horas
     const displayHours = hours === 0 || hours === 12 ? 12 : hours % 12;
 
-    return `${year}-${month}-${day} ${displayHours.toString().padStart(2, '0')}:${minutes}:${seconds} ${acronym}`;
+    const formattedDate = `${year}-${month}-${day} ${displayHours.toString().padStart(2, '0')}:${minutes}:${seconds} ${acronym}`;
+
+    console.log('✅ Fecha formateada para notificación:', formattedDate);
+
+    return formattedDate;
   }
 }
