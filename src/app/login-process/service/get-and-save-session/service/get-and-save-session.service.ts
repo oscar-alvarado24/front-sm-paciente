@@ -69,7 +69,7 @@ export class GetAndSaveSessionService {
               city: from(this.cryptoService.encryptAsync(ipData.location.city, 'post')),
               latitude: from(this.cryptoService.encryptAsync(ipData.location.latitude.toString(), 'post')),
               longitude: from(this.cryptoService.encryptAsync(ipData.location.longitude.toString(), 'post')),
-              timezone: from(this.cryptoService.encryptAsync(ipData.location.localtime, 'post'))
+              timezone: from(this.cryptoService.encryptAsync(ipData.location.timezone, 'post'))
             }).pipe(
               tap(() => console.log('✅ Datos de ubicación encriptados')),
               switchMap(({ city, latitude, longitude, timezone }) => {

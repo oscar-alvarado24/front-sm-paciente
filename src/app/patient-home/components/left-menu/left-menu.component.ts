@@ -36,9 +36,13 @@ export class LeftMenuComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.email = await this.cryptoService.decryptAsync(this.storageService.getItem("email"));
-    this.imagenPerfil = await this.cryptoService.decryptAsync(this.storageService.getItem("photo"));
+    const imageSaved= this.storageService.getItem("photo");
+    if(imageSaved && imageSaved.length > 5){
+      this.imagenPerfil = await this.cryptoService.decryptAsync(imageSaved);
+    }
     this.sessionValue = this.storageService.getItem('session');
     console.log('sessionValue:', this.sessionValue);
+    console.log('typeof sessionValue:', typeof this.sessionValue);
     if (this.sessionValue && typeof this.sessionValue === 'object') {
       this.sessionInfo = {
         city: this.sessionValue.city,
@@ -49,9 +53,10 @@ export class LeftMenuComponent implements OnInit {
         latitude: await this.cryptoService.decryptAsync(this.sessionValue.latitude!),
         longitude: await this.cryptoService.decryptAsync(this.sessionValue.longitude!),
         timezone: this.sessionValue.timezone
+      };
     }
   }
-}
+
 
 
   seleccionarImagen(): void {
