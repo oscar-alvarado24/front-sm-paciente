@@ -92,8 +92,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
+            "configPath": "./jest.config.js",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
