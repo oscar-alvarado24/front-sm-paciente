@@ -5,7 +5,11 @@
   "projects": {
     "paciente": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -13,21 +17,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "qrcode",
-              "dotenv",
-              "crypto-js",
-              "aws-sdk",
-              "lodash"
-            ],
             "outputPath": "dist/paciente",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
-              "zone.js",
-              "src/polyfills.ts"
+              "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -56,7 +53,13 @@
                   "maximumError": "10kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": true,
+              "buildOptimizer": true,
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false
             },
             "development": {
               "buildOptimizer": false,
@@ -76,8 +79,7 @@
               "browserTarget": "paciente:build:production"
             },
             "development": {
-              "browserTarget": "paciente:build:development",
-              "proxyConfig": "proxy.conf.cjs"
+              "browserTarget": "paciente:build:development"
             }
           },
           "defaultConfiguration": "development",
@@ -100,6 +102,7 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -115,6 +118,8 @@
     }
   },
   "cli": {
-    "analytics": "d92d47c9-be5b-4e60-8869-f051ccfc9343"
+    "analytics": "d92d47c9-be5b-4e60-8869-f051ccfc9343",
+    "packageManager": "npm",
+    "strict": true
   }
 }
