@@ -26,22 +26,14 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["ES2022", "dom", "dom.iterable"],
     "skipLibCheck": true,
     "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": false,
-    "types": [
-      "jest",
-      "node"
-    ],
+    "types": ["jest", "node"],
     "paths": {
-      "@angular/common/http": ["./node_modules/@angular/common/fesm2022/http.mjs"],
       "@angular/*": ["./node_modules/@angular/*"]
     }
   },
@@ -56,12 +48,5 @@
     "strictLiteralTypes": false,
     "strictContextGenerics": false
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "coverage",
-    "e2e",
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ]
+  "exclude": ["node_modules", "dist", "coverage", "e2e", "**/*.spec.ts", "**/*.test.ts"]
 }
