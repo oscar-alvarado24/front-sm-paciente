@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
-import { ApolloClient, InMemoryCache, FetchPolicy, ApolloLink } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client/core';
 import { HttpLink } from 'apollo-angular/http';
-import { setContext } from '@apollo/client/link/context';
 import { SERVICES_CONFIG } from 'src/app/commons/service/graphQL/config/services.config';
 
+// Definir interfaces para los tipos necesarios
+interface ApolloClientConfig {
+  link: ApolloLink;
+  cache: InMemoryCache;
+  defaultOptions?: ApolloClient.DefaultOptions;
+}
+
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MultiApolloService {
-  private clients: Record<string, ApolloClient<any>> = {};
+  private readonly clients: Map<string, ApolloClient> = new Map();
 
   constructor(private readonly httpLink: HttpLink) {
     this.initializeClients();
@@ -18,101 +25,123 @@ export class MultiApolloService {
     Object.entries(SERVICES_CONFIG).forEach(([serviceName, config]) => {
       console.log(`Initializing Apollo client for ${serviceName} with URI: ${config.uri}`);
 
-      // Crear el HTTP link básico
-      const http = this.httpLink.create({
-        uri: config.uri
-      });
+      // Crear el enlace HTTP usando HttpLink de apollo-angular
+      const httpLink = this.httpLink.create({ uri: config.uri });
 
-      // Crear el auth link con headers
-      const authLink = setContext((_, { headers }) => {
+      // Crear un enlace personalizado para manejar headers
+      const authLink = new ApolloLink((operation, forward) => {
         const serviceHeaders = this.getHeadersForService(serviceName);
-        return {
+
+        // Obtener headers del contexto actual
+        const context = operation.getContext();
+
+        // Usar spread operator para combinar headers
+        operation.setContext(() => ({
           headers: {
-            ...headers,
-            ...serviceHeaders
-          }
-        };
+            ...context.headers,
+            ...serviceHeaders,
+          },
+        }));
+
+        return forward(operation);
       });
 
-      // Combinar los links
-      const link = ApolloLink.from([authLink, http]);
+      // Usar ApolloLink.from
+      const link = ApolloLink.from([authLink, httpLink]);
 
-      this.clients[serviceName] = new ApolloClient({
+      // Crear configuración del cliente Apollo
+      const clientConfig: ApolloClientConfig = {
         link: link,
         cache: new InMemoryCache(this.getCacheConfigForService(serviceName)),
-        defaultOptions: this.getDefaultOptionsForService(serviceName)
-      });
+        defaultOptions: this.getDefaultOptionsForService(serviceName),
+      };
+
+      // Crear el cliente Apollo
+      const client = new ApolloClient(clientConfig);
+      this.clients.set(serviceName, client);
     });
   }
 
-  // Obtener cliente específico para un servicio
-  getClient(serviceName: string): ApolloClient<any> {
-    const client = this.clients[serviceName];
+  getClient(serviceName: string): ApolloClient {
+    const client = this.clients.get(serviceName);
     if (!client) {
       throw new Error(`Apollo client for service '${serviceName}' not found`);
     }
     return client;
   }
 
-  // Headers específicos por servicio - Retorna objeto plano
   private getHeadersForService(serviceName: string): Record<string, string> {
     const commonHeaders: Record<string, string> = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     };
 
     const serviceHeaders: Record<string, Record<string, string>> = {
       patient_st: { 'X-Patient-Service': 'v1' },
-      patient_ct: { 'X-Patient-Service': 'v1' }
+      patient_ct: { 'X-Patient-Service': 'v1' },
     };
 
     return {
       ...commonHeaders,
-      ...(serviceHeaders[serviceName] || {})
+      ...(serviceHeaders[serviceName] || {}),
     };
   }
 
-  // Configuración de cache específica por servicio
   private getCacheConfigForService(serviceName: string) {
     const commonConfig = {
       addTypename: true,
     };
 
-    const serviceConfigs: Record<string, any> = {
+    const serviceHeaders: Record<string, any> = {
       patient_st: {
         ...commonConfig,
         typePolicies: {
           Patient: {
             keyFields: ['id'],
             fields: {
-              photo: { merge: false }, 
-            }
-          }
-        }
+              photo: {
+                merge: false,
+              },
+            },
+          },
+        },
       },
       patient_ct: {
         ...commonConfig,
-        typePolicies: {
-        }
-      }
+        typePolicies: {},
+      },
     };
 
-    return serviceConfigs[serviceName] || commonConfig;
+    return serviceHeaders[serviceName] || commonConfig;
   }
 
-  // Opciones por defecto específicas por servicio
   private getDefaultOptionsForService(serviceName: string) {
-    return {
+    const defaultOptions: ApolloClient.DefaultOptions = {
       watchQuery: {
-        errorPolicy: 'none' as const,
-        fetchPolicy: serviceName === 'patient_st' ? 'cache-first': 'cache-and-network' as FetchPolicy
+        fetchPolicy: 'cache-and-network',
+        errorPolicy: 'ignore',
       },
       query: {
-        errorPolicy: 'none' as const,
-        fetchPolicy: serviceName === 'patient_st' ? 'cache-first' : 'cache-and-network' as FetchPolicy
+        fetchPolicy: 'network-only',
+        errorPolicy: 'all',
       },
       mutate: {
-        errorPolicy: 'none' as const,
-      }
+        errorPolicy: 'all',
+      },
     };
+    return defaultOptions;
+  }
+
+  // Método para limpiar el cache de un cliente específico
+  clearCache(serviceName: string): Promise<void> {
+    const client = this.clients.get(serviceName);
+    if (client) {
+      return client.cache.reset();
+    }
+    return Promise.resolve();
+  }
+
+  // Método para obtener todos los clientes (útil para debugging)
+  getAllClients(): Map<string, ApolloClient> {
+    return new Map(this.clients);
   }
 }
