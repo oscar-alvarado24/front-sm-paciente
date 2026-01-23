@@ -1,4 +1,13 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
-  "recommendations": ["angular.ng-template"]
+  "recommendations": [
+    "angular.ng-template",           // Angular Language Service
+    "dbaeumer.vscode-eslint",        // ESLint
+    "esbenp.prettier-vscode",        // Prettier
+    "firsttris.vscode-jest-runner",  // Jest
+    "ms-vscode.vscode-typescript",   // TypeScript ESTABLE (no next)
+    "ms-vscode.vscode-json",         // Para JSON
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.vscode-typescript-next" // Eliminar la versión next
+  ]
 }

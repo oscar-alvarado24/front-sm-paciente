@@ -1,20 +1,62 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
       "type": "chrome",
       "request": "launch",
+      "name": "Angular: HTTPS Local",
+      "url": "https://localhost:4200",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/src/*"
+      },
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "postDebugTask": "terminate-all-terminal",
+      "runtimeArgs": [
+        "--disable-web-security",
+        "--disable-site-isolation-trials",
+        "--ignore-certificate-errors"
+      ]
     },
     {
-      "name": "ng test",
-      "type": "chrome",
+      "type": "node",
       "request": "launch",
-      "preLaunchTask": "npm: test",
-      "url": "http://localhost:9876/debug.html"
+      "name": "Jest Tests",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "--runInBand",
+        "--no-coverage",
+        "--config",
+        "${workspaceFolder}/jest.config.js"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Angular Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start"
+      ],
+      "serverReadyAction": {
+        "pattern": ".*(https?://localhost:\\d+).*",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      },
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Angular Full Debug",
+      "configurations": ["Angular Server", "Angular: HTTPS Local"]
     }
   ]
 }

@@ -1,6 +1,90 @@
 {
-    "CodeGPT.apiKey": "LM Studio",
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "typescript.enablePromptUseWorkspaceTsdk": true,
-    "typescript.tsserver.experimental.enableProjectDiagnostics": true
+  // Configuración de Angular
+  "angular.enable-strict-mode-prompt": false,
+  "angular.suggest.includeCompletionsWithSnippetText": true,
+
+  // Configuración de TypeScript
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.paths": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.disableAutomaticTypeAcquisition": false,
+  "typescript.validate.enable": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "typescript.tsserver.maxTsServerMemory": 4096,
+
+  // Configuración de JavaScript
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "javascript.suggest.autoImports": true,
+  "javascript.suggest.paths": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.validate.enable": true,
+
+  // Editor y formateo
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+
+  // Prettier
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": true,
+
+  // ESLint
+  "eslint.enable": true,
+  "eslint.validate": ["javascript", "typescript", "html"],
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.options": {
+    "overrideConfigFile": ".eslintrc.json",
+    "useEslintrc": false // Fuerza usar el archivo específico
+  },
+  "eslint.run": "onSave",
+  // Files
+  "files.associations": {
+    "*.css": "css",
+    "*.json": "json",
+    "*.ts": "typescript"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "node_modules": true,
+    "dist": true,
+    "coverage": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true
+  },
+
+  // Search
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.angular": true
+  },
+
+  // Terminal
+  "terminal.integrated.env.windows": {
+    "NODE_OPTIONS": "--max-old-space-size=8192"
+  },
+
+  // Debug
+  "debug.javascript.autoAttachFilter": "smart",
+  "debug.internalConsoleOptions": "openOnSessionStart"
 }

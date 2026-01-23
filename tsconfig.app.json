@@ -1,8 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "outDir": "./out-tsc/app",
     "types": []
   },
@@ -11,5 +9,8 @@
   ],
   "include": [
     "src/**/*.d.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
 }

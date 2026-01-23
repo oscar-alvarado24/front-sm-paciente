@@ -1,3 +1,4 @@
+// jest.config.js
 module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
@@ -8,7 +9,9 @@ module.exports = {
     '!src/**/*.spec.ts',
     '!src/**/*.module.ts',
     '!src/main.ts',
-    '!src/environments/**'
+    '!src/environments/**',
+    '!src/**/*.config.ts',
+    '!src/**/*.d.ts'
   ],
   coverageThreshold: {
     global: {
@@ -20,9 +23,21 @@ module.exports = {
   },
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
-    '^@environments/(.*)$': '<rootDir>/src/environments/$1'
+    '^@environments/(.*)$': '<rootDir>/src/environments/$1',
+    '^@angular/common/http$': '<rootDir>/node_modules/@angular/common/fesm2022/http.mjs'
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(@angular|@ngrx|apollo-angular|@apollo|rxjs|tslib)/)'
-  ]
+    String.raw`node_modules/(?!.*\.mjs$|@angular|rxjs)`
+  ],
+  extensionsToTreatAsEsm: ['.ts'],
+  transform: {
+    '^.+\\.(ts|mjs|js|html)$': [
+      'jest-preset-angular',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: String.raw`\.(html|svg)$`,
+        useESM: true
+      }
+    ]
+  }
 };

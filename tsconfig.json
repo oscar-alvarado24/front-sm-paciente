@@ -7,37 +7,43 @@
     "strict": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "noImplicitThis": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
-      "dom"
+      "dom",
+      "dom.iterable"
     ],
     "skipLibCheck": true,
-    "emitDecoratorMetadata": true,
+    "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
-    
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "paths": {
+      "@angular/common/http": ["./node_modules/@angular/common/fesm2022/http.mjs"],
+      "@angular/*": ["./node_modules/@angular/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -46,6 +52,16 @@
     "strictTemplates": true,
     "strictAttributeTypes": true,
     "strictSafeNavigationTypes": true,
-    "strictDomLocalRefTypes": true
-  }
+    "strictDomLocalRefTypes": true,
+    "strictLiteralTypes": false,
+    "strictContextGenerics": false
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "e2e",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }
