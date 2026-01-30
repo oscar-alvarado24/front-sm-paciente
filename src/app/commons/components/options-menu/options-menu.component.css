@@ -1,6 +1,6 @@
 .principal {
   margin: 0;
-  position: relative; /* Cambiado de fixed a relative */
+  position: relative;
   width: 100%;
 }
 
@@ -40,14 +40,20 @@
   padding: 10px 0;
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  top: 100%;
+  left: 0;
+  transition: opacity 0.2s ease;
+  opacity: 0;
 }
 
 .horizontal-menu li:hover > .submenu {
   display: block;
+  opacity: 1;
 }
 
 .horizontal-menu .submenu li {
   padding: 5px 20px;
+  white-space: nowrap;
 }
 
 .horizontal-menu .submenu li:hover {
