@@ -1,0 +1,20 @@
+<section>
+  <app-email (emailValid)="onEmailValid($event)" (emailValue)="onEmailValue($event)"></app-email>
+  <app-password (passwordsValue)="onPasswordsValue($event)" (passwordValid)="onPasswordValid($event)">
+  </app-password>
+
+  <button (click)="signIn()" [disabled]="!isEmailValid || !arePasswordValid || isLoading()">
+    @if (isLoading()) {
+      <output class="spinner-border spinner-border-sm" aria-hidden="true"></output>
+      Cargando...
+    } @else {
+      Iniciar Sesión
+    }
+  </button>
+
+  <div class="forgot-password-container">
+    <button type="button" (click)="forgotPassword()" [disabled]="!isEmailValid" class="forgot-password-btn">
+      ¿Ha olvidado su contraseña?
+    </button>
+  </div>
+</section>

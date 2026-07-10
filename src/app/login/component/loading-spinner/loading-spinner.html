@@ -1,0 +1,18 @@
+<section>
+  <div class="overlay">
+    <div class="modal-card">
+      <div class="spinner-wrapper">
+        <div class="spinner">
+          @for (i of segments; track i) {
+            <div
+              #segment
+              class="segment"
+              [style.transform]="'rotate(' + (i * 20) + 'deg) translateX(-3px)'"
+            ></div>
+          }
+        </div>
+        <p class="loading-text">Cargando</p>
+      </div>
+    </div>
+  </div>
+</section>

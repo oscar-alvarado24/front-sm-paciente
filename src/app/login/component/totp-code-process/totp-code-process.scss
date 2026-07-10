@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-primary {
+  border-radius: 4px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  padding: 8px 24px;
+  font-size: 1rem;
+
+  &:hover:not([disabled]) {
+    background-color: #1558b0;
+  }
+}

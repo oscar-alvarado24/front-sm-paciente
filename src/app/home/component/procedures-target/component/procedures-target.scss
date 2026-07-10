@@ -1,0 +1,147 @@
+.appointment-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-header {
+  color: white;
+  padding: 24px;
+  position: relative;
+
+  &.upcoming-header  { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+  &.error-header      { background: linear-gradient(135deg, #5f5e5e3f 0%, #05050575 100%); }
+  &.required-header   { background: linear-gradient(135deg, #ec6628 0%, #f83c3c 100%); }
+  &.completed-header  { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); }
+  &.cancelled-header  { background: linear-gradient(135deg, #8B0000 0%, #FF6B6B 100%); }
+  &.missed-header     { background: linear-gradient(135deg, #f4f803 0%, #f0e68b 100%); }
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.status-style {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+}
+
+.date-time {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.procedure-info {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.procedure-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 6px;
+}
+
+.doctor-info {
+  margin-bottom: 20px;
+}
+
+.doctor-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 4px;
+}
+
+.specialty {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+
+  &.icon-building  { color: #2563eb; }
+  &.icon-calendar  { color: #3498db; }
+  &.icon-location  { color: #1abc9c; }
+  &.icon-note      { color: #f39c12; }
+}
+
+.detail-text {
+  font-size: 14px;
+  color: #34495e;
+  line-height: 1.4;
+
+  &.address     { color: #1abc9c; font-weight: 500; }
+  &.observations { font-style: italic; color: #7f8c8d; }
+}
+
+.time-indicator {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f3f4;
+}
+
+.relative-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.time-icon {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
+}

@@ -1,0 +1,29 @@
+<section>
+  <div class="procedures-section upcoming-procedures">
+    <h2>Próximos Procedimientos ({{ upcomingProcedures.length }})</h2>
+    @if (upcomingProcedures.length > 0) {
+      <ul class="cards-grid">
+        @for (cita of upcomingProcedures; track cita.date) {
+          <li>
+            <app-procedures-target [procedureData]="cita" [isUpcoming]="true" />
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty-state">{{ messageUpcomingProcedures }}</p>
+    }
+
+    <h2>Procedimientos Anteriores ({{ previousProcedures.length }})</h2>
+    @if (previousProcedures.length > 0) {
+      <ul class="cards-grid">
+        @for (cita of previousProcedures; track cita.date) {
+          <li>
+            <app-procedures-target [procedureData]="cita" [isUpcoming]="false" />
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty-state">{{ messagePreviousProcedures }}</p>
+    }
+  </div>
+</section>

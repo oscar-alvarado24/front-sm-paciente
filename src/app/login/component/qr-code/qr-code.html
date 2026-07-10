@@ -1,0 +1,22 @@
+<section>
+    @if (qrUrl.trim(); as qrData) {
+        <div class="qr-code-wrapper">
+            <div class="qr-code-inner">
+                <qrcode [qrdata]="qrData" [width]="qrCodeConfig.width"
+                    [errorCorrectionLevel]="qrCodeConfig.errorCorrectionLevel" [elementType]="qrCodeConfig.elementType"
+                    [margin]="qrCodeConfig.margin" [scale]="qrCodeConfig.scale" [colorDark]="qrCodeConfig.colorDark"
+                    [colorLight]="qrCodeConfig.colorLight">
+                </qrcode>
+            </div>
+        </div>
+
+        <!-- Estado: cargando QR -->
+        } @else {
+        <div class="qr-loading">
+            <div class="qr-loading-placeholder">
+                <span class="spinner-charging-qr "></span>
+                <p class="qr-loading-text">Generando código QR...</p>
+            </div>
+        </div>
+        }
+</section>

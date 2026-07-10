@@ -1,0 +1,67 @@
+<section>
+  <div class="appointment-card" [class.upcoming]="isUpcoming" [class.previous]="!isUpcoming">
+    <div class="card-header" [ngClass]="getHeaderClass()">
+      <div class="header-top">
+        <div class="status-badge" [ngClass]="getStatusClass()">
+          {{ procedureData.status }}
+        </div>
+      </div>
+
+      @if (showDate) {
+        <div class="date-time">
+          {{ getFormattedDate() }} - {{ getFormattedTime() }}
+        </div>
+      } @else {
+        <div class="date-time">SIN AGENDAR</div>
+      }
+    </div>
+
+    <div class="card-body">
+      <div class="procedure-info">
+        <div class="procedure-name">{{ procedureData.name }}</div>
+      </div>
+
+      <div class="doctor-info">
+        <div class="doctor-name">{{ procedureData.doctorName }}</div>
+        <div class="specialty">{{ procedureData.specialty }}</div>
+      </div>
+
+      <div class="appointment-details">
+        <div class="detail-row">
+          <svg class="icon icon-building" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V8h14v13z" />
+            <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM7 14h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z" />
+          </svg>
+          <span class="detail-text">{{ procedureData.medicalCenterName }}</span>
+        </div>
+
+        <div class="detail-row">
+          <svg class="icon icon-location" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+          <span class="detail-text address">{{ procedureData.address }} - {{ procedureData.city }}</span>
+        </div>
+
+        @if (showObservations) {
+          <div class="detail-row">
+            <svg class="icon icon-note" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14,17H7V15H14M17,13H7V11H17M17,9H7V7H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" />
+            </svg>
+            <span class="detail-text observations">{{ procedureData.observations }}</span>
+          </div>
+        }
+      </div>
+
+      @if (showTimeIndicator) {
+        <div class="time-indicator">
+          <div class="relative-time">
+            <svg class="time-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" />
+            </svg>
+            {{ getRelativeTime() }}
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

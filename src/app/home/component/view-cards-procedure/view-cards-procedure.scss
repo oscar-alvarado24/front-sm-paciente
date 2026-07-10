@@ -1,0 +1,66 @@
+// ─── Variables ───────────────────────────────────────────────────────────────
+$border-color:   #e0e0e0;
+$bg-white:       white;
+$shadow:         0 2px 4px rgba(0 0 0 / 10%);
+$radius:         8px;
+$section-pad:    20px;
+
+$grid-min-xl:    400px;
+$grid-min-lg:    350px;
+$grid-gap-xl:    24px;
+$grid-gap-lg:    20px;
+$grid-gap-md:    16px;
+$grid-gap-sm:    12px;
+
+$bp-lg:          1024px;
+$bp-md:          768px;
+$bp-sm:          480px;
+
+$text-muted:     #7f8c8d;
+
+// ─── Host ─────────────────────────────────────────────────────────────────────
+:host {
+  display: block;
+  height: auto;
+}
+
+// ─── Secciones de procedimientos ─────────────────────────────────────────────
+.procedures-section {
+  border: 2px solid $border-color;
+  border-radius: $radius;
+  padding: $section-pad;
+  background-color: $bg-white;
+  box-shadow: $shadow;
+}
+
+// ─── Grid de tarjetas ────────────────────────────────────────────────────────
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($grid-min-xl, 1fr));
+  gap: $grid-gap-xl;
+  padding: 0;
+  margin: 0;
+  list-style: none; // semántico: es <ul>
+
+  @media (max-width: $bp-lg) {
+    grid-template-columns: repeat(auto-fill, minmax($grid-min-lg, 1fr));
+    gap: $grid-gap-lg;
+  }
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: 1fr;
+    gap: $grid-gap-md;
+  }
+
+  @media (max-width: $bp-sm) {
+    gap: $grid-gap-sm;
+  }
+}
+
+// ─── Estado vacío ─────────────────────────────────────────────────────────────
+.empty-state {
+  color: $text-muted;
+  font-style: italic;
+  margin: 0;
+  padding: 8px 0;
+}

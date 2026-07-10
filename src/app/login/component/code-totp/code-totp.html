@@ -1,0 +1,35 @@
+<form [formGroup]="codeForm" class="container">
+  <div class="field-row">
+    <div class="col-auto">
+      <label for="code" class="col-form-label">Código</label>
+    </div>
+    <div class="col">
+      <div class="input-group">
+        <input
+          id="code"
+          class="form-control w-25"
+          aria-describedby="codigo-verificacion"
+          placeholder="Ingresa el código"
+          formControlName="code"
+          type="text"
+          inputmode="numeric"
+          maxlength="6"
+        />
+      </div>
+
+      @if (code.invalid && (code.dirty || code.touched)) {
+        <div class="text-danger mt-1">
+          @if (code.errors?.['required']) {
+            <small>El código es obligatorio.</small>
+          }
+          @if (code.errors?.['pattern']) {
+            <small>Ingresa un valor válido de solo números.</small>
+          }
+          @if (code.errors?.['minlength'] || code.errors?.['maxlength']) {
+            <small>Debe tener 6 caracteres.</small>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</form>

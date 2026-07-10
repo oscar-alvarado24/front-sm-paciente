@@ -1,0 +1,37 @@
+<section>
+    <div class="container login_section">
+
+        @if (currentState() === 'INITIAL') {
+            <app-form
+                (currentStateEmitter)="onCurrentState($event)"
+                (qrInscriptionEmitter)="onSharedSecret($event)">
+            </app-form>
+        }
+
+        @if (currentState() === 'NEW_PASSWORD_REQUIRED') {
+            <app-change-origin-password
+                (sharedSecretEmmiter)="onSharedSecret($event)"
+                (currentStateEmitter)="onCurrentState($event)">
+            </app-change-origin-password>
+        }
+
+        @if (currentState() === 'VIEW QR') {
+            <app-qr-code
+                (currentStateEmitter)="onCurrentState($event)"
+                [sharedSecret]="sharedSecret()">
+            </app-qr-code>
+        }
+
+        @if (currentState() === 'VIEW QR' || currentState() === 'SEND TOTP CODE') {
+            <app-totp-code-process
+                (currentStateEmitter)="onCurrentState($event)"
+                (totpProcessSuccessfulEmitter)="onTotpProcessSuccessful($event)">
+            </app-totp-code-process>
+        }
+
+    </div>
+
+    @if (showSpinner()) {
+        <app-loading-spinner></app-loading-spinner>
+    }
+</section>

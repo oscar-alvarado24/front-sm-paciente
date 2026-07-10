@@ -1,0 +1,26 @@
+// ─── Bootstrap: configuración base (obligatoria) ─────────────────────────────
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot'; 
+
+// ─── Grid system (row, col, col-auto, col-*, offset-*, etc.) ─────────────────
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+
+// ─── Utilities (mb-3, w-25, d-flex, text-danger, etc.) ───────────────────────
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities/api';
+
+// ─── Formularios (form-control, input-group, col-form-label) ─────────────────
+@import 'bootstrap/scss/forms';
+
+// ─── Iconos ────────────────────────────────────────────────────────────────
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

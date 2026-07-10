@@ -1,0 +1,76 @@
+<section class="principal">
+  <nav class="horizontal-menu" aria-label="Menú principal">
+    <ul>
+
+      <li
+        [class.active]="activeMenu === 'medical-appointments'"
+        (mouseenter)="handleMouseEnter('medical-appointments')"
+        (mouseleave)="handleMouseLeave()"
+      >
+        <button
+          type="button"
+          aria-haspopup="true"
+          [attr.aria-expanded]="activeMenu === 'medical-appointments'"
+        >
+          Citas médicas
+        </button>
+        @if (activeMenu === 'medical-appointments') {
+          <ul class="submenu">
+            <li><button type="button">Agendar Cita</button></li>
+            <li><button type="button">Modificar Cita</button></li>
+            <li><button type="button">Cancelar Cita</button></li>
+          </ul>
+        }
+      </li>
+
+      <li
+        [class.active]="activeMenu === 'laboratory'"
+        (mouseenter)="handleMouseEnter('laboratory')"
+        (mouseleave)="handleMouseLeave()"
+      >
+        <button
+          type="button"
+          aria-haspopup="true"
+          [attr.aria-expanded]="activeMenu === 'laboratory'"
+        >
+          Laboratorio
+        </button>
+        @if (activeMenu === 'laboratory') {
+          <ul class="submenu">
+            <li><button type="button">Agendar Cita</button></li>
+            <li><button type="button">Descargar Resultado</button></li>
+          </ul>
+        }
+      </li>
+
+      <li
+        [class.active]="activeMenu === 'medications'"
+        (mouseenter)="handleMouseEnter('medications')"
+        (mouseleave)="handleMouseLeave()"
+      >
+        <button
+          type="button"
+          aria-haspopup="true"
+          [attr.aria-expanded]="activeMenu === 'medications'"
+        >
+          Medicamentos
+        </button>
+        @if (activeMenu === 'medications') {
+          <ul class="submenu">
+            <li><button type="button">Descargar Formula</button></li>
+            <li><button type="button">Reclamar Medicamento</button></li>
+          </ul>
+        }
+      </li>
+
+      <li
+        [class.active]="activeMenu === 'notifications'"
+        (mouseenter)="handleMouseEnter('notifications')"
+        (mouseleave)="handleMouseLeave()"
+      >
+        <button type="button">Notificaciones</button>
+      </li>
+
+    </ul>
+  </nav>
+</section>

@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-code-wrapper {
+  margin-bottom: 0.5rem;
+}
+
+.spinner-charging-qr {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.qr-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  color: var(--color-text-muted, #6b7280);
+  font-size: 0.875rem;
+}
+
+.qr-loading-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  border: 2px dashed rgba(45, 107, 255, 0.25);
+  background: rgba(45, 107, 255, 0.04);
+  animation: qrPulseBorder 2s ease-in-out infinite;
+}

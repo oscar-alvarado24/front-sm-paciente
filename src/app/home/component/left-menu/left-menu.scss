@@ -1,0 +1,207 @@
+// ─── Variables ───────────────────────────────────────────────────────────────
+$menu-bg: #863a8a;
+$avatar-bg: #c84a2f;
+$border-alpha: rgba(255 255 255 / 20%);
+$hover-bg: rgba(255 255 255 / 10%);
+$shadow-sm: 0 2px 4px rgba(0 0 0 / 20%);
+$shadow-md: 0 4px 8px rgba(0 0 0 / 20%);
+$radius-menu: 15px;
+$radius-avatar: 50%;
+$menu-max-width: 250px;
+$font-base: Arial, sans-serif;
+
+// ─── Principal wrapper ────────────────────────────────────────────────────────
+.principal {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+// ─── Perfil + menú container ─────────────────────────────────────────────────
+.perfil-menu-container {
+  position: relative;
+  width: 100%;
+  max-width: $menu-max-width;
+  font-family: $font-base;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// ─── Avatar ───────────────────────────────────────────────────────────────────
+.avatar-container {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.avatar-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: $radius-avatar;
+  background-color: $avatar-bg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: $radius-avatar;
+  position: absolute;
+  inset: 0;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.avatar-editar {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  background-color: white;
+  border-radius: $radius-avatar;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+  border: 1px solid rgba(0 0 0 / 10%);
+  padding: 0;
+  box-shadow: $shadow-sm;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+  }
+
+  i {
+    font-size: 14px;
+    color: #888;
+  }
+}
+
+// ─── Menú ─────────────────────────────────────────────────────────────────────
+.menu {
+  background-color: $menu-bg;
+  border-radius: $radius-menu;
+  overflow: hidden;
+  box-shadow: $shadow-md;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: 0;
+}
+
+// ─── Sección de sesión ────────────────────────────────────────────────────────
+.session-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  border-bottom: 1px solid $border-alpha;
+}
+
+.session-title {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
+  width: 100%;
+  padding: 15px 15px 0;
+  box-sizing: border-box;
+}
+
+.session-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 15px 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: white;
+  opacity: 0.9;
+}
+
+.info-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: white;
+
+  &--message {
+    text-align: center;
+    padding: 10px 15px 15px;
+    margin: 0;
+  }
+}
+
+// ─── Items del menú ───────────────────────────────────────────────────────────
+.menu-item {
+  // Reset nativo de <button>
+  appearance: none;
+  background: none;
+  font-family: $font-base;
+
+  color: white;
+  padding: 15px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  border-bottom: 1px solid $border-alpha;
+  display: block;
+  margin: 0;
+  line-height: 1.2;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease;
+  outline: none;
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+
+  &:focus-visible {
+    background-color: $hover-bg;
+    outline: 2px solid rgba(255 255 255 / 60%);
+    outline-offset: -2px;
+  }
+
+  &--last {
+    border-bottom: none;
+  }
+}
+
+// ─── Input oculto ─────────────────────────────────────────────────────────────
+.hidden-input {
+  display: none;
+}

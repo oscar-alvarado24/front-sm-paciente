@@ -1,0 +1,137 @@
+// ─── Variables ───────────────────────────────────────────────────────────────
+$primary-color:       #1a73e8;
+$primary-hover:       #1558b0;
+$text-dark:           #1a1a1a;
+$text-medium:         #444;
+$border-color:        #e0e0e0;
+$btn-width:           60%;
+$section-min-height:  500px;
+
+// ─── Layout principal ────────────────────────────────────────────────────────
+.row {
+  display: flex;
+  min-height: $section-min-height;
+  align-items: stretch;
+}
+
+// ─── Columna imagen ───────────────────────────────────────────────────────────
+.image {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0 !important;
+
+  .img-fluid {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+// ─── Columna opciones ─────────────────────────────────────────────────────────
+.options {
+  position: relative;
+  width: 50%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  .watermark {
+    position: absolute;
+    inset: 0;
+    background: url('/assets/icono_medicina.jpg') no-repeat center center;
+    background-size: contain;
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .title-section,
+  .section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .title-section {
+    padding-bottom: 20px;
+    border-bottom: 1px solid $border-color;
+    width: 100%;
+    margin-bottom: 10px;
+
+    h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 15px;
+      color: $text-medium;
+    }
+  }
+
+  .section {
+    width: 100%;
+    padding: 25px 0;
+    border-bottom: 1px solid $border-color;
+
+    h2 {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: $text-dark;
+    }
+
+    p {
+      font-size: 15px;
+      color: $text-medium;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      width: $btn-width;
+      padding: 12px;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+
+      &:hover {
+        background-color: $primary-hover;
+      }
+    }
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .image,
+  .options {
+    width: 100%;
+  }
+
+  .image {
+    min-height: 250px;
+  }
+
+  .options {
+    padding: 24px;
+
+    .section .btn {
+      width: 100%;
+    }
+  }
+}
