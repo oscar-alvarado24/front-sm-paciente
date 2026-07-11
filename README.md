@@ -4,8 +4,8 @@ This project is an Angular-based frontend application designed for managing pati
 
 ## Badges
 
-[![Angular Version](https://img.shields.io/badge/Angular-17.2-blue.svg)](https://angular.io/)
-[![TypeScript Version](https://img.shields.io/badge/TypeScript-5.4-blue.svg)](https://www.typescriptlang.org/)
+[![Angular Version](https://img.shields.io/badge/Angular-21.2.14-blue.svg)](https://angular.io/)
+[![TypeScript Version](https://img.shields.io/badge/TypeScript-5.9.3-blue.svg)](https://www.typescriptlang.org/)
 [![Bootstrap Version](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com/)
 [![AWS Amplify](https://img.shields.io/badge/AWS%20Amplify-managed-orange.svg)](https://aws.amazon.com/amplify/)
 [![Apollo Client](https://img.shields.io/badge/Apollo%20Client-integrated-FF6B75.svg)](https://www.apollographql.com/)
@@ -45,7 +45,7 @@ The `front-sm-paciente` project provides a robust interface for patients to inte
 
 ## Tech Stack 🛠️
 
-- **Frontend Framework:** Angular (v17+)
+- **Frontend Framework:** Angular (v21)
 - **Language:** TypeScript
 - **Styling:** SCSS, Bootstrap 5
 - **State Management:** Angular Signals
@@ -53,7 +53,6 @@ The `front-sm-paciente` project provides a robust interface for patients to inte
 - **GraphQL Client:** Apollo Client
 - **HTTP Client:** Angular HttpClient
 - **API Integration:** RESTful APIs, GraphQL
-- **Testing:** Vitest
 - **Build Tool:** Angular CLI
 - **Package Manager:** pnpm
 - **Utilities:** Bootstrap Icons, angularx-qrcode
